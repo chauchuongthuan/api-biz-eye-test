@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type NotificationType {
+  id: ID!
+  message: String!
+  data: String!
+  value: String!
+  type: String!
+  seen: Boolean!
+  createdAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  items(page: Int!, limit: Float!, type: Float, seen: Boolean): [NotificationType!]!
+}
+
+type Mutation {
+  seen(id: String!): NotificationType!
+}
+
+type Subscription {
+  notification: NotificationType!
+}

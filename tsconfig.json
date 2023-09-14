@@ -1,0 +1,29 @@
+{
+   "compilerOptions": {
+      "module": "commonjs",
+      // "module": "esnext",
+      // "moduleResolution": "node",
+      "skipLibCheck": true,
+      "resolveJsonModule": true,
+      "declaration": true,
+      "removeComments": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "es2017",
+      "sourceMap": true,
+      "outDir": "./dist",
+      "baseUrl": "./",
+      "incremental": true,
+      "paths": {
+         "@src/*": ["./src/*"],
+         "@projects/*": ["./src/projects/*"],
+         "@common/*": ["./src/common/*"],
+         "@core/*": ["./src/core/*"],
+         "@schemas/*": ["./src/schemas/*"]
+      }
+   },
+   "include": ["src", "src/core/plugins/i18n/**/*.json"],
+   "exclude": ["public", "storage", "node_modules", "dist"]
+}
+
