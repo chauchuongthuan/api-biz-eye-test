@@ -131,9 +131,8 @@ export function mkdirSync(path: string) {
 export function thumb(doc: any, field: string, collectionName: string, scales?: object, type?: string): string {
    const fileName = doc[field];
    if (configUpload().FILESYSTEM_DRIVER == 'public') {
-      var dirUrl = `${configUpload().NODE_URL}/${configUpload().FILESYSTEM_DRIVER}/${
-         configUpload().PREFIX_UPLOAD_URL
-      }/${collectionName}/${doc.id}/${field}`;
+      var dirUrl = `${configUpload().NODE_URL}/${configUpload().FILESYSTEM_DRIVER}/${configUpload().PREFIX_UPLOAD_URL
+         }/${collectionName}/${doc.id}/${field}`;
    } else if (configUpload().FILESYSTEM_DRIVER == 'do') {
       var dirUrl = `${configUpload().DO_URL}/${configUpload().PREFIX_UPLOAD_URL}/${collectionName}/${doc.id}/${field}`;
    } else if (configUpload().FILESYSTEM_DRIVER == 'gc') {
@@ -368,6 +367,7 @@ export async function savePhotos(
 ) {
    const fileNames = (doc[field] || []).filter(Boolean);
    const dirFolder = `${collectionName}/${doc.id}/${field}`;
+
    if (fileNames) {
       //remove old file
       if (configUpload().FILESYSTEM_DRIVER == 'public') {
@@ -401,7 +401,7 @@ export async function savePhotos(
                               Bucket: configUpload().DO_BUCKET,
                               Key: oldFilePath,
                            },
-                           function (error, data) {},
+                           function (error, data) { },
                         );
                      }
                   }
@@ -410,10 +410,13 @@ export async function savePhotos(
          });
       } else if (configUpload().FILESYSTEM_DRIVER == 'gc') {
          const s3 = await initGcCloud();
+
          const [files] = await s3.getFiles({
             prefix: `${configUpload().PREFIX_UPLOAD}/${dirFolder}`,
          });
          files.forEach((file) => {
+            console.log('For file upload', file);
+
             const oldFilePath = file.name;
             const baseExt = extname(oldFilePath);
             const baseName = path.basename(oldFilePath, baseExt).split('_')[0];
@@ -777,7 +780,7 @@ export async function createFolder(folderName: string, dir: string): Promise<any
 // ------------------------------------Process Local
 
 export async function deleteFileLocal(filePath: string) {
-   return fs.unlink(filePath, function (error, result) {});
+   return fs.unlink(filePath, function (error, result) { });
 }
 
 export async function deleteFolderLocal(dirFolder: string) {
@@ -816,8 +819,8 @@ export async function saveFileLocal(
    const dest = `${dirDest}/${baseName}${baseExt}`;
    await mkdirSync(dirDest);
    if (isImg && compress) await compressImage(src, compressOut, compressOptions);
-   if (isImg && compress) await fs.copyFile(`${compressOut}/${baseName}${baseExt}`, dest, function (error) {});
-   else await fs.copyFile(src, dest, function (error) {});
+   if (isImg && compress) await fs.copyFile(`${compressOut}/${baseName}${baseExt}`, dest, function (error) { });
+   else await fs.copyFile(src, dest, function (error) { });
 
    const scalesAr = Object.entries(scales);
 
@@ -836,8 +839,8 @@ export async function saveFileLocal(
          } else {
             await resizeImage(dest, tmpScale, width, height, fitOption);
             await compressImage(tmpScale, compressOut, compressOptions);
-            await fs.copyFile(`${compressOut}/${baseNameScale}`, destScale, function (error) {});
-            fs.unlink(tmpScale, function (error) {});
+            await fs.copyFile(`${compressOut}/${baseNameScale}`, destScale, function (error) { });
+            fs.unlink(tmpScale, function (error) { });
          }
       }
 
@@ -882,7 +885,7 @@ export async function deleteFileCloud(filePath: string) {
          Bucket: configUpload().DO_BUCKET,
          Key: filePath,
       },
-      function (error, data) {},
+      function (error, data) { },
    );
 }
 
@@ -906,7 +909,7 @@ export async function deleteFolderCloud(dirFolder: string, exceptFiles: Array<st
                      Bucket: configUpload().DO_BUCKET,
                      Key: oldFile,
                   },
-                  function (error, data) {},
+                  function (error, data) { },
                );
             }
          }
@@ -964,7 +967,7 @@ export async function saveFileCloud(
    if (isImg && compress) await compressImage(src, compressOut, compressOptions);
    if (compress) {
       await uploadToCloud(`${compressOut}/${baseName}${baseExt}`, dest);
-      fs.unlink(`${compressOut}/${baseName}${baseExt}`, function (error) {});
+      fs.unlink(`${compressOut}/${baseName}${baseExt}`, function (error) { });
    } else await uploadToCloud(src, dest);
 
    const lastLoop = scales ? Object.keys(scales).slice(-1)[0] : 0;
@@ -983,15 +986,15 @@ export async function saveFileCloud(
          if (!compress) {
             await resizeImage(src, destScaleTmp, width, height, fitOption);
             await uploadToCloud(destScaleTmp, destScale);
-            fs.unlink(destScaleTmp, function (error) {});
+            fs.unlink(destScaleTmp, function (error) { });
          } else {
             await resizeImage(src, destScaleTmp, width, height, fitOption);
             await compressImage(destScaleTmp, compressOut, compressOptions);
             await uploadToCloud(`${compressOut}/${baseNameScale}`, destScale);
-            fs.unlink(destScaleTmp, function (error) {});
-            fs.unlink(`${compressOut}/${baseNameScale}`, function (error) {});
+            fs.unlink(destScaleTmp, function (error) { });
+            fs.unlink(`${compressOut}/${baseNameScale}`, function (error) { });
          }
-         if (lastLoop == index) fs.unlink(src, function (error) {});
+         if (lastLoop == index) fs.unlink(src, function (error) { });
       }
       // await Promise.all(
       //    Object.keys(scales).map(async function (index) {
@@ -1015,7 +1018,7 @@ export async function saveFileCloud(
       //    }),
       // );
    } else {
-      fs.unlink(src, function (error) {});
+      fs.unlink(src, function (error) { });
    }
    return `${baseName}${baseExt}`;
 }
@@ -1096,6 +1099,8 @@ export async function saveFileGcCloud(
    fitOption?: string,
    compressOptions?: compressOptionInterface,
 ) {
+   console.log('asdasdasdasd', src);
+
    const storageTmp = configUpload().PREFIX_UPLOAD_TMP;
    const compress = compressOptions ? Object.keys(compressOptions).length : false;
    const compressOut = `${storageTmp}/cpress`;
@@ -1108,7 +1113,7 @@ export async function saveFileGcCloud(
    if (isImg && compress) await compressImage(src, compressOut, compressOptions);
    if (compress) {
       await uploadToGcCloud(`${compressOut}/${baseName}${baseExt}`, dest);
-      fs.unlink(`${compressOut}/${baseName}${baseExt}`, function (error) {});
+      fs.unlink(`${compressOut}/${baseName}${baseExt}`, function (error) { });
    } else await uploadToGcCloud(src, dest);
 
    const lastLoop = scales ? Object.keys(scales).slice(-1)[0] : 0;
@@ -1127,15 +1132,15 @@ export async function saveFileGcCloud(
          if (!compress) {
             await resizeImage(src, destScaleTmp, width, height, fitOption);
             await uploadToGcCloud(destScaleTmp, destScale);
-            fs.unlink(destScaleTmp, function (error) {});
+            fs.unlink(destScaleTmp, function (error) { });
          } else {
             await resizeImage(src, destScaleTmp, width, height, fitOption);
             await compressImage(destScaleTmp, compressOut, compressOptions);
             await uploadToGcCloud(`${compressOut}/${baseNameScale}`, destScale);
-            fs.unlink(destScaleTmp, function (error) {});
-            fs.unlink(`${compressOut}/${baseNameScale}`, function (error) {});
+            fs.unlink(destScaleTmp, function (error) { });
+            fs.unlink(`${compressOut}/${baseNameScale}`, function (error) { });
          }
-         if (lastLoop == index) fs.unlink(src, function (error) {});
+         if (lastLoop == index) fs.unlink(src, function (error) { });
       }
       // await Promise.all(
       //    Object.keys(scales).map(async function (index) {
@@ -1159,7 +1164,7 @@ export async function saveFileGcCloud(
       //    }),
       // );
    } else {
-      fs.unlink(src, function (error) {});
+      fs.unlink(src, function (error) { });
    }
    return `${baseName}${baseExt}`;
 }

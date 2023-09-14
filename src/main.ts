@@ -69,7 +69,7 @@ async function bootstrap() {
 }
 
 class Swagger {
-   constructor(private app: NestExpressApplication) {}
+   constructor(private app: NestExpressApplication) { }
 
    /**
     * Register more swagger api here

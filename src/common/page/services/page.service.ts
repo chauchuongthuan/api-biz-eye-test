@@ -15,7 +15,7 @@ export class PageService {
       @InjectModel(Page.name) private pages: PaginateModel<Page>,
       private helperService: HelperService,
       private userService: UserService,
-   ) {}
+   ) { }
 
    async detail(id: string): Promise<any> {
       return this.pages.findOne({ _id: id, deleteAt: null });

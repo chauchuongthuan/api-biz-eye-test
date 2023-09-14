@@ -34,6 +34,7 @@ export async function convertContentFileDto(
    await forEachAny(files, function (file, index) {
       const firstPosition = file.fieldname.indexOf('[');
       const name = file.fieldname.slice(0, firstPosition);
+      console.log('Hello baby', files);
       // sigleFile for a field
       if (multiFileField.includes(file.fieldname)) {
          const newErrors = validationSingleFile(file, validations, messages);
@@ -196,7 +197,8 @@ export async function saveThumbOrPhotos(doc: any) {
             }),
          );
       }
-   } else if (typeof doc.thumbPhotos === 'function') {
+   }
+   if (typeof doc.thumbPhotos === 'function') {
       const thumbPhotos = doc.thumbPhotos();
       if (thumbPhotos && thumbPhotos['fields'] && thumbPhotos['collection']) {
          await Promise.all(

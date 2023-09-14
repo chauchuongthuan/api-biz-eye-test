@@ -34,12 +34,12 @@ export class Post extends Document {
    ])
    assigned: Array<any>;
 
-   @Prop({
-      index: true,
-      type: SchemaTypes.ObjectId,
-      ref: PostCategory.name,
-   })
-   postCategory: any;
+   // @Prop({
+   //    index: true,
+   //    type: SchemaTypes.ObjectId,
+   //    ref: PostCategory.name,
+   // })
+   // postCategory: any;
 
    @Prop([
       {
@@ -67,7 +67,7 @@ export class Post extends Document {
 
    @Prop({
       trim: true,
-      default: null
+      default: null,
    })
    titleNon: string;
 
@@ -97,10 +97,11 @@ export class Post extends Document {
    view: number;
 
    @Prop({
-      default: '',
-      trim: true,
+      required: false,
+      default: {},
+      type: Array,
    })
-   readTime: string;
+   gallery: any;
 
    @Prop({
       required: false,
@@ -182,12 +183,20 @@ PostSchema.methods.thumbnail = function (field: string, type: string): object {
       fields: {
          image: {},
          imageMb: {},
-         metaImage: {
-            // FB: '600x314',
-         },
       },
-      // fieldTrans: {
-      // },
+      fieldTrans: {
+         metaImage: {},
+      },
+   };
+};
+
+PostSchema.methods.thumbPhotos = function (field: string, type: string): object {
+   return {
+      collection: 'posts',
+      method: 'inside',
+      fields: {
+         gallery: {},
+      },
    };
 };
 

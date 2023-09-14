@@ -6,6 +6,7 @@ import { TransformerUserService } from '@src/common/users/services/transformerUs
 import { InjectModel } from '@nestjs/mongoose';
 import { PostComment } from '@src/schemas/posts/postComment.schemas';
 import { PaginateModel } from 'mongoose';
+import { photos } from '@src/core/helpers/file';
 const moment = require('moment');
 @Injectable({ scope: Scope.REQUEST })
 export class TransformerPostService {
@@ -48,7 +49,7 @@ export class TransformerPostService {
          shortDescription: doc.shortDescription,
          active: doc.active,
          sortOrder: doc.sortOrder,
-			count: doc.count,
+         count: doc.count,
          metaTitle: doc.metaTitle,
          metaImage: doc.thumb('metaImage', ''),
          metaDescription: doc.metaDescription,
@@ -65,16 +66,16 @@ export class TransformerPostService {
             data:
                docs.length > 0
                   ? docs.map(function (doc) {
-                       return {
-                          id: `${doc._id}`,
-                          title: doc.title,
-                          slug: doc.slug,
-                          shortDescription: doc.shortDescription,
-                          active: doc.active == true ? 'Có' : 'Không',
-                          sortOrder: doc.sortOrder,
-                          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
-                       };
-                    })
+                     return {
+                        id: `${doc._id}`,
+                        title: doc.title,
+                        slug: doc.slug,
+                        shortDescription: doc.shortDescription,
+                        active: doc.active == true ? 'Có' : 'Không',
+                        sortOrder: doc.sortOrder,
+                        createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+                     };
+                  })
                   : [{}],
             customHeaders: customHeaders || [
                'ID',
@@ -141,6 +142,7 @@ export class TransformerPostService {
          sortOrder: doc.sortOrder,
          metaTitle: doc.metaTitle,
          metaImage: doc.thumb('metaImage'),
+         gallery: doc.gallery && doc.gallery.length > 0 ? photos(doc, 'gallery', 'posts') : [],
          metaDescription: doc.metaDescription,
          metaKeyword: doc.metaKeyword,
          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
@@ -156,23 +158,23 @@ export class TransformerPostService {
             data:
                docs.length > 0
                   ? docs.map(function (doc) {
-                       return {
-                          id: `${doc._id}`,
-                          postCategory: JSON.stringify(self.transformCategoryDetail(doc.postCategory)),
-                          tagNames: JSON.stringify(doc.tags.length ? doc.tags.map((tag) => tag.name) : []),
-                          image: doc.thumb('image'),
-                          imageMb: doc.thumb('imageMb'),
-                          title: JSON.stringify(doc.title),
-                          slug: JSON.stringify(doc.slug),
-                          shortDescription: JSON.stringify(doc.shortDescription),
-                          content: JSON.stringify(doc.content),
-                          statusText: StatusTrans(doc.status),
-                          publishedAt: doc.publishedAt ? moment(doc.publishedAt).format(DateTime.CREATED_AT) : null,
-                          sortOrder: doc.sortOrder,
-                          feature: doc.feature == true ? 'Có' : 'Không',
-                          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
-                       };
-                    })
+                     return {
+                        id: `${doc._id}`,
+                        postCategory: JSON.stringify(self.transformCategoryDetail(doc.postCategory)),
+                        tagNames: JSON.stringify(doc.tags.length ? doc.tags.map((tag) => tag.name) : []),
+                        image: doc.thumb('image'),
+                        imageMb: doc.thumb('imageMb'),
+                        title: JSON.stringify(doc.title),
+                        slug: JSON.stringify(doc.slug),
+                        shortDescription: JSON.stringify(doc.shortDescription),
+                        content: JSON.stringify(doc.content),
+                        statusText: StatusTrans(doc.status),
+                        publishedAt: doc.publishedAt ? moment(doc.publishedAt).format(DateTime.CREATED_AT) : null,
+                        sortOrder: doc.sortOrder,
+                        feature: doc.feature == true ? 'Có' : 'Không',
+                        createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+                     };
+                  })
                   : [{}],
             customHeaders: customHeaders || [
                'ID',
@@ -235,15 +237,15 @@ export class TransformerPostService {
             data:
                docs.length > 0
                   ? docs.map(function (doc) {
-                       return {
-                          id: `${doc._id}`,
-                          name: doc.name,
-                          slug: doc.slug,
-                          active: doc.active == true ? 'Có' : 'Không',
-                          sortOrder: doc.sortOrder,
-                          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
-                       };
-                    })
+                     return {
+                        id: `${doc._id}`,
+                        name: doc.name,
+                        slug: doc.slug,
+                        active: doc.active == true ? 'Có' : 'Không',
+                        sortOrder: doc.sortOrder,
+                        createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+                     };
+                  })
                   : [{}],
             customHeaders: customHeaders || ['ID', 'Tên', 'Slug', 'Trạng thái', 'Thứ tự', 'Ngày tạo'],
          },

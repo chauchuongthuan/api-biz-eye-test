@@ -24,7 +24,7 @@ export class PostCategoryService {
 
    constructor(
       @InjectModel(PostCategory.name) private category: PaginateModel<PostCategory>,
-		@InjectModel(Post.name) private postModel: PaginateModel<Post>,
+      @InjectModel(Post.name) private postModel: PaginateModel<Post>,
       @Inject(REQUEST) private request: any,
       private helper: HelperService,
    ) {
@@ -110,89 +110,89 @@ export class PostCategoryService {
    }
 
    async findAllFrontend(query: Record<string, any>): Promise<any> {
-		const locale = this.locale;
-		const conditions = {};
-		conditions['active'] = true;
-		conditions['deletedAt'] = null;
-		const sort = Object();
-		query.orderBy =
-			['name'].indexOf(query.orderBy) != -1
-				? `${query.orderBy}.${this.locale}`
-				: query.orderBy;
-		sort[query.orderBy] = query.order;
+      const locale = this.locale;
+      const conditions = {};
+      conditions['active'] = true;
+      conditions['deletedAt'] = null;
+      const sort = Object();
+      query.orderBy = ['name'].indexOf(query.orderBy) != -1 ? `${query.orderBy}.${this.locale}` : query.orderBy;
+      sort[query.orderBy] = query.order;
 
-		const projection = {};
+      const projection = {};
 
-		if (isNotEmpty(query.selects)) {
-			query.selects.split(',').forEach(select => {
-				projection[select] = 1;
-			});
-		}
+      if (isNotEmpty(query.selects)) {
+         query.selects.split(',').forEach((select) => {
+            projection[select] = 1;
+         });
+      }
 
-		if (isNotEmpty(query.name)) {
-			conditions[`name.${locale}`] = {
-				$regex: new RegExp(query.name, 'img'),
-			};
-		}
+      if (isNotEmpty(query.name)) {
+         conditions[`name.${locale}`] = {
+            $regex: new RegExp(query.name, 'img'),
+         };
+      }
 
-		if (isNotEmpty(query.title)) {
-			conditions[`title.${locale}`] = {
-				$regex: new RegExp(query.title, 'img'),
-			};
-		}
+      if (isNotEmpty(query.title)) {
+         conditions[`title.${locale}`] = {
+            $regex: new RegExp(query.title, 'img'),
+         };
+      }
 
-		if (isNotEmpty(query.idNotIn)) {
-			conditions['_id'] = {
-				$nin: query.idNotIn,
-			};
-		}
+      if (isNotEmpty(query.idNotIn)) {
+         conditions['_id'] = {
+            $nin: query.idNotIn,
+         };
+      }
 
-		if (isNotEmpty(query.idIn)) {
-			conditions['_id'] = {
-				$in: query.idIn,
-			};
-		}
+      if (isNotEmpty(query.idIn)) {
+         conditions['_id'] = {
+            $in: query.idIn,
+         };
+      }
 
-		if (isNotEmpty(query.createdFrom) || isNotEmpty(query.createdTo)) {
-			const createdFrom = moment(query.createdFrom || '1000-01-01').startOf('day');
-			const createdTo = moment(query.createdTo || '3000-01-01').endOf('day');
-			conditions[`createdAt`] = {
-				$gte: createdFrom,
-				$lte: createdTo,
-			};
-		}
-      
-		const count = await this.postModel.aggregate([
-         { $match: { status: StatusEnum.PUBLISHED, publishedAt: { $lte: new Date() }, deletedAt: { $eq: null }}},
-			{ $group: { _id: '$postCategory', count: { $sum: 1 } } },
-		]);
+      if (isNotEmpty(query.createdFrom) || isNotEmpty(query.createdTo)) {
+         const createdFrom = moment(query.createdFrom || '1000-01-01').startOf('day');
+         const createdTo = moment(query.createdTo || '3000-01-01').endOf('day');
+         conditions[`createdAt`] = {
+            $gte: createdFrom,
+            $lte: createdTo,
+         };
+      }
 
-		let rs;
-		if (isNotEmpty(query.get)) {
-			const get = parseInt(query.get);
-			const result = this.category
-				.find(conditions)
-				.sort(sort)
-				.select(projection);
-			rs = isNaN(get) ? await result : await result.limit(get);
-		} else {
-			rs = await this.category.paginate(conditions, {
-				select: projection,
-				page: query.page,
-				limit: query.limit,
-				sort: sort,
-			});
-		}
+      const count = await this.postModel.aggregate([
+         { $match: { status: StatusEnum.PUBLISHED, publishedAt: { $lte: new Date() }, deletedAt: { $eq: null } } },
+         { $group: { _id: '$postCategory', count: { $sum: 1 } } },
+      ]);
 
-		rs.map(item => {
-			if (~count.findIndex(ele => ele?._id?.toString() === item?._id?.toString() || ele?.id?.toString() === item?.id?.toString()) ) {
-				const index = count.findIndex(ele => ele?._id?.toString() === item?._id?.toString() || ele?.id?.toString() === item?.id?.toString());
-				item['count'] = count[index]['count'];
-			} else item['count'] = 0;
-		});
+      let rs;
+      if (isNotEmpty(query.get)) {
+         const get = parseInt(query.get);
+         const result = this.category.find(conditions).sort(sort).select(projection);
+         rs = isNaN(get) ? await result : await result.limit(get);
+      } else {
+         rs = await this.category.paginate(conditions, {
+            select: projection,
+            page: query.page,
+            limit: query.limit,
+            sort: sort,
+         });
+      }
 
-		return rs;
-	}
+      rs.map((item) => {
+         if (
+            ~count.findIndex(
+               (ele) => ele?._id?.toString() === item?._id?.toString() || ele?.id?.toString() === item?.id?.toString(),
+            )
+         ) {
+            const index = count.findIndex(
+               (ele) => ele?._id?.toString() === item?._id?.toString() || ele?.id?.toString() === item?.id?.toString(),
+            );
+            item['count'] = count[index]['count'];
+         } else item['count'] = 0;
+      });
+
+      return rs;
+   }
 
    async findById(id: string): Promise<PostCategory> {
       return this.category.findById(id).exec();

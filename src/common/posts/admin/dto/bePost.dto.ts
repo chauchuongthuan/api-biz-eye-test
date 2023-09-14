@@ -46,6 +46,15 @@ export class BePostDto {
    imageMb: string;
 
    @ApiProperty({
+      type: Object,
+      description: 'gallery',
+      required: false,
+   })
+   @IsValidTrans(['required:false', 'maxlength:10000', 'transFile:page'], {})
+   @IsOptional()
+   gallery: object;
+
+   @ApiProperty({
       type: String,
       description: 'title',
       required: true,
@@ -105,13 +114,13 @@ export class BePostDto {
    // @MyDate(['YYYY-MM-DD HH:mm:ss'], { message: 'Ngày đăng không hợp lệ!' })
    publishedAt: string;
 
-   @ApiProperty({
-      type: String,
-      description: 'readTime',
-      required: true,
-   })
-   @IsNotEmpty()
-   readTime: string;
+   // @ApiProperty({
+   //    type: String,
+   //    description: 'readTime',
+   //    required: true,
+   // })
+   // @IsNotEmpty()
+   // readTime: string;
 
    @ApiProperty({
       description: 'sortOrder',

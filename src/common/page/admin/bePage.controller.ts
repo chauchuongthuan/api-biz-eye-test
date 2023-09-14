@@ -15,7 +15,7 @@ import { Permissions } from '@core/services/permission.service';
 @UseInterceptors(CoreTransformInterceptor)
 @UserSecure()
 export class BePageController {
-   constructor(private page: PageService, private transformer: TransformerPageService, private response: ResponseService) {}
+   constructor(private page: PageService, private transformer: TransformerPageService, private response: ResponseService) { }
 
    @Get()
    @ACL(Permissions.page_list)
@@ -31,7 +31,7 @@ export class BePageController {
    async findById(@Param('id') id: string): Promise<any> {
       const item = await this.page.findById(id);
       if (!item) return this.response.detailFail();
-      await saveFileContent('content', item, 'pages', false);
+      // await saveFileContent('content', item, 'pages', false);
       return this.response.detailSuccess(await this.transformer.transformPageDetail(item));
    }
 

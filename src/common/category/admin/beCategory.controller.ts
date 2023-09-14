@@ -35,7 +35,7 @@ export class BeCategoryController {
       private categoryService: CategoryService,
       private transformer: TransformerCategoryService,
       private response: ResponseService,
-   ) {}
+   ) { }
 
    // Find list categories
    @Get()
@@ -61,6 +61,7 @@ export class BeCategoryController {
    // Update category
 
    @Put(':id')
+   @HasFile()
    async update(@Param('id') id: string, @Body() dto: BeCategoryDto): Promise<any> {
       const item = await this.categoryService.update(id, dto);
       if (!item) return this.response.updatedFail();

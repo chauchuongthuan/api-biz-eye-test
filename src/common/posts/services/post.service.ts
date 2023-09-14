@@ -5,11 +5,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isNotEmpty, isIn } from 'class-validator';
 import { Post } from '@schemas/posts/post.schemas';
 import { StatusEnum } from '@core/constants/post.enum';
-import { convertContentFileDto, saveThumbOrPhotos } from '@core/helpers/content';
+import { convertContentFileDto, deleteSpecifyFile, saveFileContent, saveThumbOrPhotos } from '@core/helpers/content';
 import { TagService } from '@common/posts/services/tag.service';
 import { HelperService } from '@core/services/helper.service';
 import { UserService } from '@src/common/users/services/user.service';
-import { PostCategory } from '@src/schemas/posts/postCategory.schemas';
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
 @Injectable()
@@ -21,7 +20,6 @@ export class PostService {
 
    constructor(
       @InjectModel(Post.name) private post: PaginateModel<Post>,
-      @InjectModel(PostCategory.name) private postCategory: PaginateModel<PostCategory>,
       @Inject(REQUEST) private request: any,
       private tag: TagService,
       private userService: UserService,
@@ -136,13 +134,7 @@ export class PostService {
 
       if (isNotEmpty(query.get)) {
          const get = parseInt(query.get);
-         const result = this.post
-            .find(conditions)
-            .sort(sort)
-            .select(projection)
-            .populate('postCategory')
-            .populate('tags')
-            .populate('assigned');
+         const result = this.post.find(conditions).sort(sort).select(projection).populate('tags').populate('assigned');
          return isNaN(get) ? result : result.limit(get);
       } else {
          return this.post.paginate(conditions, {
@@ -150,7 +142,7 @@ export class PostService {
             page: query.page,
             limit: query.limit,
             sort: sort,
-            populate: ['postCategory', 'tags', 'author', 'assigned'],
+            populate: ['tags', 'author', 'assigned'],
          });
       }
    }
@@ -221,11 +213,11 @@ export class PostService {
 
       if (isNotEmpty(query.get)) {
          const get = parseInt(query.get);
-         const result = this.post.find(conditions).sort(sort).select(projection).populate('postCategory');
+         const result = this.post.find(conditions).sort(sort).select(projection);
          return isNaN(get) ? result : result.limit(get);
       } else {
          return this.post.paginate(conditions, {
-            populate: query.populate || ['postCategory', 'tags', 'assigned'],
+            populate: query.populate || ['tags', 'assigned'],
             select: projection,
             page: query.page,
             limit: query.limit,
@@ -246,17 +238,17 @@ export class PostService {
       conditions[`slug`] = slug;
       conditions[`active`] = true;
       conditions['publishedAt'] = { $lte: moment().format('YYYY-MM-DD HH:mm:ss') };
-      return await this.post.findOne(conditions).populate('postCategory').populate('tags').populate('assigned');
+      return await this.post.findOne(conditions).populate('tags').populate('assigned');
    }
 
    async create(data: object, files: Record<any, any>): Promise<Post> {
-      if (!data['postCategory']) {
-         let category = await this.postCategory.findOne({ deletedAt: null });
-         data['postCategory'] = category._id;
-      }
+      // if (!data['postCategory']) {
+      //    const category = await this.postCategory.findOne({ deletedAt: null });
+      //    data['postCategory'] = category._id;
+      // }
       const titleNon = await this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
-      let exist = await this.post.findOne({ slug: data['slug'] });
+      const exist = await this.post.findOne({ slug: data['slug'] });
       if (exist && exist.status !== 1) this.helper.throwException('Slug đã tồn tại');
       else if (exist) {
          return this.update(exist._id, data, files);
@@ -265,7 +257,9 @@ export class PostService {
       const tagIds = [];
       const userId = [];
       //
-      await convertContentFileDto(data, files, ['image', 'imageMb', 'metaImage']);
+      await convertContentFileDto(data, files, ['image', 'imageMb', 'gallery', 'metaImage']);
+      // await convertContentFileDto(data, files, ['image', 'gallery', 'metaImage']);
+
       if (typeof data['tags'] != 'undefined') {
          await Promise.all(
             data['tags'].map(async function (name, index) {
@@ -281,13 +275,47 @@ export class PostService {
       data['view'] = 0;
       data['author'] = this.user._id;
       data['status'] = data['status'] || this.defaultStatus;
+      // data['gallery'] = 123;
       // data['publishedAt'] = data['publishedAt'] || moment().format('YYYY-MM-DD HH:mm:ss');
       // if (data['assigned'].length > 0) {
       //    this.sendMailSendGrid(data, 'tạo mới và phân công cho bạn');
       // }
       const item = await new this.post(data).save();
-      if (item) await saveThumbOrPhotos(item);
+      if (item) {
+         await saveThumbOrPhotos(item);
+      }
       return item;
+   }
+
+   async galleries(id: string, data: any, files: Record<any, any>): Promise<any> {
+      files.forEach((file) => {
+         let fields = file.fieldname.replaceAll('[', ' ').replaceAll(']', '').split(' ');
+         fields = fields.filter((field) => isNotEmpty(field));
+         this.assignStringFieldToObject(data, fields, file.filename);
+      });
+
+      const item = await this.post.findByIdAndUpdate(id, data, { new: true });
+
+      if (item) {
+         try {
+            await Promise.all([saveThumbOrPhotos(item), saveFileContent('gallery', item, 'post', true)]);
+         } catch (error) {
+            console.log(error);
+         }
+      }
+      return item;
+   }
+
+   assignStringFieldToObject(data: any, fields: Array<any>, value: any) {
+      console.log('22', data);
+      if (fields.length == 1) {
+         data[fields[0]] = value;
+         console.log('1', value);
+         console.log('2', fields[0]);
+      } else {
+         const field = fields.shift();
+         this.assignStringFieldToObject(data[field], fields, value);
+      }
    }
 
    async update(id: string, data: object, files: Record<any, any>): Promise<any> {
@@ -379,9 +407,9 @@ export class PostService {
    }
 
    async sendMailSendGrid(data: any, message: string): Promise<boolean> {
-      let mailTo = await Promise.all(
+      const mailTo = await Promise.all(
          data.assigned.map(async (element) => {
-            let assigned = await this.userService.findOne({ _id: element });
+            const assigned = await this.userService.findOne({ _id: element });
             return assigned.email;
          }),
       );

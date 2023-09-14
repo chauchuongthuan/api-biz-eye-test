@@ -29,7 +29,7 @@ export class BePostController {
       private helper: HelperService,
       private notificationsService: NotificationsService,
       private pubSubService: PubSubService,
-   ) {}
+   ) { }
 
    @Get()
    @ACL(Permissions.post_list)
@@ -84,13 +84,12 @@ export class BePostController {
    async add(@UploadedFiles() files, @Body() dto: BePostDto, @UserAuth() user: User): Promise<any> {
       const item = await this.post.create(dto, files);
       if (!item) return this.response.createdFail();
-      console.log('user---->', user);
-      let data = {
+      const data = {
          type: 1,
          message: `Người dùng ${user?.name} vừa tạo bài viết mới`,
          data: item._id,
       };
-      let notification = await this.notificationsService.create(data);
+      const notification = await this.notificationsService.create(data);
       notification['seen'] = false;
       this.pubSubService.publishPubSub('notification', {
          notification: notification,
@@ -118,7 +117,7 @@ export class BePostController {
    @Post('change-status')
    @ACL(Permissions.post_change_status)
    async changeStatus(@Body() dto: ChangeStatusDto): Promise<any> {
-      let status = await this.post.changeStatus(dto);
+      const status = await this.post.changeStatus(dto);
       if (!status) return this.response.createdFail();
       return this.response.updatedSuccess(await this.transformer.transformPostDetail(status));
    }
