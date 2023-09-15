@@ -183,8 +183,6 @@ PostSchema.methods.thumbnail = function (field: string, type: string): object {
       fields: {
          image: {},
          imageMb: {},
-      },
-      fieldTrans: {
          metaImage: {},
       },
    };
@@ -199,16 +197,6 @@ PostSchema.methods.thumbPhotos = function (field: string, type: string): object 
       },
    };
 };
-
-PostSchema.methods.fieldTranslations = function (): any {
-   return {
-      title: true,
-      // shortDescription: true,
-   };
-};
-
-// PostSchema.index({ 'slug.vi': 1 }, { unique: true });
-// PostSchema.index({ 'slug.en': 1 }, { unique: true });
 
 PostSchema.post('save', function (error, doc, next) {
    if (error.name === 'MongoError' && error.code === 11000) {

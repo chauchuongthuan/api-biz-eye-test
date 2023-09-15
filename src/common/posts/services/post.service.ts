@@ -257,8 +257,7 @@ export class PostService {
       const tagIds = [];
       const userId = [];
       //
-      await convertContentFileDto(data, files, ['image', 'imageMb', 'gallery', 'metaImage']);
-      // await convertContentFileDto(data, files, ['image', 'gallery', 'metaImage']);
+      await convertContentFileDto(data, files, ['image', 'imageMb', 'metaImage', 'gallery']);
 
       if (typeof data['tags'] != 'undefined') {
          await Promise.all(
@@ -319,25 +318,11 @@ export class PostService {
    }
 
    async update(id: string, data: object, files: Record<any, any>): Promise<any> {
-      const self = this;
-      const tagIds = [];
       let item = await this.findById(id);
       if (!item) return false;
       const titleNon = await this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
-      await convertContentFileDto(data, files, ['image', 'imageMb', 'metaImage']);
-      if (typeof data['tags'] != 'undefined') {
-         await Promise.all(
-            data['tags'].map(async function (name, index) {
-               if (!name) return;
-               const slug = self.helper.removeSignVietnameseSlug(name);
-               const nameNon = self.helper.removeSignVietnamese(name);
-               const resultTag = await self.tag.createOnce({ name }, { name, slug, nameNon, active: true, sortOrder: index });
-               tagIds.push(resultTag._id);
-            }),
-         );
-         data['tags'] = tagIds;
-      }
+      await convertContentFileDto(data, files, ['image', 'imageMb', 'metaImage', 'gallery']);
 
       // data['publishedAt'] = data['publishedAt'] || moment().format('YYYY-MM-DD HH:mm:ss');
       data['lastEditor'] = this.user._id;

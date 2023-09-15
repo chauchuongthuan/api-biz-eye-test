@@ -50,7 +50,6 @@ export class BePostDto {
       description: 'gallery',
       required: false,
    })
-   @IsValidTrans(['required:false', 'maxlength:10000', 'transFile:page'], {})
    @IsOptional()
    gallery: object;
 
