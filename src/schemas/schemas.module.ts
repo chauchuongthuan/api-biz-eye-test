@@ -27,6 +27,7 @@ import { PostComment, PostCommentSchema } from './posts/postComment.schemas';
 import { History, HistorySchema } from './history/history.schema';
 import { Notification, NotificationSchema } from './notification.schema';
 import { Seen, SeenSchema } from './seens.schema';
+import { Expertise, ExpertiseSchema } from './expertise/expertise.schema';
 
 const modelSchemas = [
    MongooseModule.forFeature([{ name: TokenBlacklist.name, schema: TokenBlacklistSchema }]),
@@ -76,6 +77,9 @@ const modelSchemas = [
    //notification
    MongooseModule.forFeature([{ name: Notification.name, schema: NotificationSchema }]),
    MongooseModule.forFeature([{ name: Seen.name, schema: SeenSchema }]),
+
+   // Expertise
+   MongooseModule.forFeature([{ name: Expertise.name, schema: ExpertiseSchema }]),
 ];
 
 @Module({

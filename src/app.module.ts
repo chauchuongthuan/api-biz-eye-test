@@ -29,6 +29,7 @@ import { ItemModule } from './items/item.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ChatHistoryModule } from './common/chatGPTHistory/chatHistory.module';
 import { NotificationModule } from './items/notification/notification.module';
+import { ExpertiseModule } from './common/expertise/expertise.module';
 const queueDriver = process.env.QUEUE_DRIVER;
 
 const imports = [
@@ -66,6 +67,7 @@ const imports = [
    TaskScheduleModule,
    DashboardModule,
    ChatHistoryModule,
+   ExpertiseModule,
 ];
 
 if (queueDriver == 'redis') imports.push(QueueModule);
