@@ -16,7 +16,7 @@ export class PageService {
       @InjectModel(Page.name) private pages: PaginateModel<Page>,
       private helperService: HelperService,
       private userService: UserService,
-   ) {}
+   ) { }
 
    async detail(id: string): Promise<any> {
       return this.pages.findOne({ _id: id, deleteAt: null });
@@ -94,6 +94,12 @@ export class PageService {
          });
       }
    }
+
+   async findByCodeFrontend(pageCode: string): Promise<Page> {
+      console.log(pageCode);
+      return this.pages.findOne({ code: pageCode, deleteAt: null }).exec();
+   }
+
    async findById(id: string): Promise<Page> {
       const item = await this.pages.findById(id);
       await saveFileContent('content', item, 'pages', false);
