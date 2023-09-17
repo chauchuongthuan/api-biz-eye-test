@@ -8,6 +8,7 @@ import { UserService } from 'src/common/users/services/user.service';
 import { convertContentFileDto, deleteSpecifyFile, saveFileContent, saveThumbOrPhotos } from 'src/core/helpers/content';
 import { Page } from '@src/schemas/page/page.schema';
 import { BePageDto } from '../dto/bePage.dto';
+import { async } from 'rxjs';
 const moment = require('moment');
 @Injectable()
 export class PageService {
@@ -94,7 +95,9 @@ export class PageService {
       }
    }
    async findById(id: string): Promise<Page> {
-      return this.pages.findById(id).exec();
+      const item = await this.pages.findById(id);
+      await saveFileContent('content', item, 'pages', false);
+      return item;
    }
    async update(id: string, data: BePageDto, files: Array<any>): Promise<Page> {
       console.log(files);

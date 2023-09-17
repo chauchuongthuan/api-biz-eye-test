@@ -66,16 +66,16 @@ export class TransformerPostService {
             data:
                docs.length > 0
                   ? docs.map(function (doc) {
-                     return {
-                        id: `${doc._id}`,
-                        title: doc.title,
-                        slug: doc.slug,
-                        shortDescription: doc.shortDescription,
-                        active: doc.active == true ? 'Có' : 'Không',
-                        sortOrder: doc.sortOrder,
-                        createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
-                     };
-                  })
+                       return {
+                          id: `${doc._id}`,
+                          title: doc.title,
+                          slug: doc.slug,
+                          shortDescription: doc.shortDescription,
+                          active: doc.active == true ? 'Có' : 'Không',
+                          sortOrder: doc.sortOrder,
+                          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+                       };
+                    })
                   : [{}],
             customHeaders: customHeaders || [
                'ID',
@@ -158,23 +158,23 @@ export class TransformerPostService {
             data:
                docs.length > 0
                   ? docs.map(function (doc) {
-                     return {
-                        id: `${doc._id}`,
-                        postCategory: JSON.stringify(self.transformCategoryDetail(doc.postCategory)),
-                        tagNames: JSON.stringify(doc.tags.length ? doc.tags.map((tag) => tag.name) : []),
-                        image: doc.thumb('image'),
-                        imageMb: doc.thumb('imageMb'),
-                        title: JSON.stringify(doc.title),
-                        slug: JSON.stringify(doc.slug),
-                        shortDescription: JSON.stringify(doc.shortDescription),
-                        content: JSON.stringify(doc.content),
-                        statusText: StatusTrans(doc.status),
-                        publishedAt: doc.publishedAt ? moment(doc.publishedAt).format(DateTime.CREATED_AT) : null,
-                        sortOrder: doc.sortOrder,
-                        feature: doc.feature == true ? 'Có' : 'Không',
-                        createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
-                     };
-                  })
+                       return {
+                          id: `${doc._id}`,
+                          postCategory: JSON.stringify(self.transformCategoryDetail(doc.postCategory)),
+                          tagNames: JSON.stringify(doc.tags.length ? doc.tags.map((tag) => tag.name) : []),
+                          image: doc.thumb('image'),
+                          imageMb: doc.thumb('imageMb'),
+                          title: JSON.stringify(doc.title),
+                          slug: JSON.stringify(doc.slug),
+                          shortDescription: JSON.stringify(doc.shortDescription),
+                          content: JSON.stringify(doc.content),
+                          statusText: StatusTrans(doc.status),
+                          publishedAt: doc.publishedAt ? moment(doc.publishedAt).format(DateTime.CREATED_AT) : null,
+                          sortOrder: doc.sortOrder,
+                          feature: doc.feature == true ? 'Có' : 'Không',
+                          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+                       };
+                    })
                   : [{}],
             customHeaders: customHeaders || [
                'ID',
@@ -237,15 +237,15 @@ export class TransformerPostService {
             data:
                docs.length > 0
                   ? docs.map(function (doc) {
-                     return {
-                        id: `${doc._id}`,
-                        name: doc.name,
-                        slug: doc.slug,
-                        active: doc.active == true ? 'Có' : 'Không',
-                        sortOrder: doc.sortOrder,
-                        createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
-                     };
-                  })
+                       return {
+                          id: `${doc._id}`,
+                          name: doc.name,
+                          slug: doc.slug,
+                          active: doc.active == true ? 'Có' : 'Không',
+                          sortOrder: doc.sortOrder,
+                          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+                       };
+                    })
                   : [{}],
             customHeaders: customHeaders || ['ID', 'Tên', 'Slug', 'Trạng thái', 'Thứ tự', 'Ngày tạo'],
          },

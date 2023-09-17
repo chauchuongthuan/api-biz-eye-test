@@ -29,7 +29,7 @@ export class BePostController {
       private helper: HelperService,
       private notificationsService: NotificationsService,
       private pubSubService: PubSubService,
-   ) { }
+   ) {}
 
    @Get()
    @ACL(Permissions.post_list)

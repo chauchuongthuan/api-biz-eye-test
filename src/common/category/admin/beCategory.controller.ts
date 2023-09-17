@@ -35,7 +35,7 @@ export class BeCategoryController {
       private categoryService: CategoryService,
       private transformer: TransformerCategoryService,
       private response: ResponseService,
-   ) { }
+   ) {}
 
    // Find list categories
    @Get()

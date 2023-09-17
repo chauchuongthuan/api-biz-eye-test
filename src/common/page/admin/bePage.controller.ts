@@ -15,7 +15,7 @@ import { Permissions } from '@core/services/permission.service';
 @UseInterceptors(CoreTransformInterceptor)
 @UserSecure()
 export class BePageController {
-   constructor(private page: PageService, private transformer: TransformerPageService, private response: ResponseService) { }
+   constructor(private page: PageService, private transformer: TransformerPageService, private response: ResponseService) {}
 
    @Get()
    @ACL(Permissions.page_list)
