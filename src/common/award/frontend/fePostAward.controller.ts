@@ -21,6 +21,7 @@ export class FeAwardPostController {
    @DefaultListQuery()
    async getAll(@Query() query: Record<string, any>): Promise<any> {
       const items = await this.awardService.findAll(query);
-      return this.response.fetchListSuccess(items);
+      if (items) this.response.createdFail();
+      return this.response.fetchListSuccess(await this.transformer.transformAwardList(items));
    }
 }
