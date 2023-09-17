@@ -12,6 +12,7 @@ import { ValidationPipe } from '@nestjs/common';
 const bodyParser = require('body-parser');
 import { tokenDrawModule } from './common/tokenDraw/tokenDraw.module';
 import { MarketingMailModule } from './common/marketingMail/marketingMail.module';
+import { AwardModule } from './common/award/award.module';
 
 async function bootstrap() {
    async function createFileEvn() {
@@ -69,7 +70,7 @@ async function bootstrap() {
 }
 
 class Swagger {
-   constructor(private app: NestExpressApplication) {}
+   constructor(private app: NestExpressApplication) { }
 
    /**
     * Register more swagger api here
@@ -79,7 +80,7 @@ class Swagger {
    }
 
    register(extraModules?: any[], path?: string, title?: string, description?: string, version?: string): void {
-      const mainModules = [AuthModule];
+      const mainModules = [AuthModule, AwardModule];
       if (extraModules) {
          mainModules.push(...extraModules);
       }

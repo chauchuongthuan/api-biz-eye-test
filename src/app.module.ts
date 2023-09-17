@@ -30,6 +30,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ChatHistoryModule } from './common/chatGPTHistory/chatHistory.module';
 import { NotificationModule } from './items/notification/notification.module';
 import { ExpertiseModule } from './common/expertise/expertise.module';
+import { AwardModule } from './common/award/award.module';
 const queueDriver = process.env.QUEUE_DRIVER;
 
 const imports = [
@@ -68,6 +69,7 @@ const imports = [
    DashboardModule,
    ChatHistoryModule,
    ExpertiseModule,
+   AwardModule,
 ];
 
 if (queueDriver == 'redis') imports.push(QueueModule);
@@ -76,4 +78,4 @@ if (queueDriver == 'redis') imports.push(QueueModule);
    controllers: [AppController],
    providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

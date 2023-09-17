@@ -28,6 +28,7 @@ import { History, HistorySchema } from './history/history.schema';
 import { Notification, NotificationSchema } from './notification.schema';
 import { Seen, SeenSchema } from './seens.schema';
 import { Expertise, ExpertiseSchema } from './expertise/expertise.schema';
+import { Award, AwardSchema } from './awards/awards.schema';
 
 const modelSchemas = [
    MongooseModule.forFeature([{ name: TokenBlacklist.name, schema: TokenBlacklistSchema }]),
@@ -80,6 +81,9 @@ const modelSchemas = [
 
    // Expertise
    MongooseModule.forFeature([{ name: Expertise.name, schema: ExpertiseSchema }]),
+
+   // Expertise
+   MongooseModule.forFeature([{ name: Award.name, schema: AwardSchema }]),
 ];
 
 @Module({
@@ -117,4 +121,4 @@ const modelSchemas = [
    ],
    exports: [MongooseModule, ...modelSchemas],
 })
-export class SchemasModule {}
+export class SchemasModule { }
