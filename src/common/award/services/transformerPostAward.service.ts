@@ -1,13 +1,12 @@
 import { Injectable, Inject, Scope } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { DateTime } from '@core/constants/dateTime.enum';
-import { thumb } from '@src/core/helpers/file';
+import { photos, thumb } from '@src/core/helpers/file';
 const moment = require('moment');
 
 @Injectable({ scope: Scope.REQUEST })
 export class TransformerPostAwardService {
    private locale;
-
    constructor(
       @Inject(REQUEST) private request: any, // private readonly transformerRole: TransformerRoleService,
    ) {
@@ -32,46 +31,33 @@ export class TransformerPostAwardService {
       }
    }
 
-   transformAwarFrontend(doc, appendData = {}, isTranslate = false) {
-      if (!doc || doc == doc._id) return doc;
-
-      // const result = {};
-      // for (const group of doc) {
-      //    result[group.year] = group.documents;
-      // }
-      // console.log(result);
-
-      return {
-         id: doc._id,
-         title: doc.title,
-         client: doc.client,
-         subTitle: doc.subTitle,
-         slug: doc.slug,
-         shortDescription: doc.shortDescription,
-         image: doc.thumb('image'),
-         sortOrder: doc.sortOrder,
-         active: doc.active,
-         year: doc.year,
-         deletedAt: doc.deletedAt ? doc.deletedAt : null,
-         createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
-         updatedAt: moment(doc.updatedAt).format(DateTime.CREATED_AT),
-         ...appendData,
-      };
-   }
-
    transformAwardetail(doc, appendData = {}, isTranslate = false) {
       if (!doc || doc == doc._id) return doc;
+      let url = '';
+      if (doc?.award?.length > 0) {
+         url = `${process.env.GC_URL}/${process.env.PREFIX_UPLOAD_URL}/awards/${doc?.award[0]._id}/image/${doc?.award[0].image}`;
+      }
+      if (doc && doc.award && doc.award[0]) {
+         doc.award[0].image = url;
+      }
       return {
          id: doc._id,
-         title: doc.title,
-         client: doc.client,
-         subTitle: doc.subTitle,
-         slug: doc.slug,
-         shortDescription: doc.shortDescription,
          image: doc.thumb('image'),
-         sortOrder: doc.sortOrder,
-         active: doc.active,
-         year: doc.year,
+         shortDescription: doc.shortDescription,
+         slug: doc.slug,
+         challenge: doc.challenge,
+         solution: doc.solution,
+         detailImage: doc.thumb('detailImage'),
+         client: doc.client,
+         shareOfVoice: doc.slug,
+         followers: doc.followers,
+         engagementRate: doc.engagementRate,
+         impressions: doc.impressions,
+         gallery: doc.gallery && doc.gallery.length > 0 ? photos(doc, 'gallery', 'Postawards') : [],
+         social: doc.social && doc.social.length > 0 ? photos(doc, 'social', 'Postawards') : [],
+         award: doc.award,
+         awardImage: doc.award,
+         category: doc.category,
          deletedAt: doc.deletedAt ? doc.deletedAt : null,
          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
          updatedAt: moment(doc.updatedAt).format(DateTime.CREATED_AT),

@@ -32,34 +32,46 @@ export class TransformerAwardService {
       }
    }
 
-   transformAwardetail(doc, appendData = {}, isTranslate = false) {
+   transformAwarFrontend(doc, appendData = {}, isTranslate = false) {
       if (!doc || doc == doc._id) return doc;
-      const awardImage: any = doc.award[0].image;
-      let url = '';
-      if (doc?.award.length > 0) {
-         url = `${process.env.GC_URL}/${process.env.PREFIX_UPLOAD_URL}/awards/${doc?.award[0]._id}/image/${doc?.award[0].image}`;
-      }
-      if (doc && doc.award && doc.award[0]) {
-         doc.award[0].image = url;
-      }
+
+      // const result = {};
+      // for (const group of doc) {
+      //    result[group.year] = group.documents;
+      // }
+      // console.log(result);
+
       return {
          id: doc._id,
-         image: doc.thumb('image'),
-         shortDescription: doc.shortDescription,
-         slug: doc.slug,
-         challenge: doc.challenge,
-         solution: doc.solution,
-         detailImage: doc.thumb('detailImage'),
+         title: doc.title,
          client: doc.client,
-         shareOfVoice: doc.slug,
-         followers: doc.followers,
-         engagementRate: doc.engagementRate,
-         impressions: doc.impressions,
-         gallery: doc.gallery && doc.gallery.length > 0 ? photos(doc, 'gallery', 'Postawards') : [],
-         social: doc.social && doc.social.length > 0 ? photos(doc, 'social', 'Postawards') : [],
-         award: doc.award,
-         awardImage: doc.award,
-         category: doc.category,
+         subTitle: doc.subTitle,
+         slug: doc.slug,
+         shortDescription: doc.shortDescription,
+         image: doc.thumb('image'),
+         sortOrder: doc.sortOrder,
+         active: doc.active,
+         year: doc.year,
+         deletedAt: doc.deletedAt ? doc.deletedAt : null,
+         createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
+         updatedAt: moment(doc.updatedAt).format(DateTime.CREATED_AT),
+         ...appendData,
+      };
+   }
+
+   transformAwardetail(doc, appendData = {}, isTranslate = false) {
+      if (!doc || doc == doc._id) return doc;
+      return {
+         id: doc._id,
+         title: doc.title,
+         client: doc.client,
+         subTitle: doc.subTitle,
+         slug: doc.slug,
+         shortDescription: doc.shortDescription,
+         image: doc.thumb('image'),
+         sortOrder: doc.sortOrder,
+         active: doc.active,
+         year: doc.year,
          deletedAt: doc.deletedAt ? doc.deletedAt : null,
          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),
          updatedAt: moment(doc.updatedAt).format(DateTime.CREATED_AT),

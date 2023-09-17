@@ -152,7 +152,7 @@ export class PostService {
       const conditions = {};
       conditions['deletedAt'] = { $eq: null };
       conditions['status'] = StatusEnum.PUBLISHED;
-      conditions['publishedAt'] = { $lte: moment().format('YYYY-MM-DD HH:mm:ss') };
+      // conditions['publishedAt'] = { $lte: moment().format('YYYY-MM-DD HH:mm:ss') };
       const sort = Object();
       query.orderBy =
          ['title', 'shortDescription'].indexOf(query.orderBy) != -1 ? `${query.orderBy}.${this.locale}` : query.orderBy;

@@ -18,7 +18,6 @@ export class FePostController {
    )
    @DefaultListQuery()
    async findByPageCode(@Query() query: Record<string, any>): Promise<any> {
-      query.populate = ['postCategory', 'tags'];
       const items = await this.post.findAllFrontend(query);
       return this.response.fetchListSuccess(await this.transformer.transformPostList(items));
    }
