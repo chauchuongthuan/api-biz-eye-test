@@ -2,11 +2,12 @@ import { Controller, Get, Query, Param, UseInterceptors } from '@nestjs/common';
 import { ResponseService } from '@core/services/response.service';
 import { TagService } from '../services/tag.service';
 import { TransformerPostService } from '@common/posts/services/transformerPost.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiTags } from '@nestjs/swagger';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
 @ApiTags('Frontend/Tag')
 @Controller('tags')
 @UseInterceptors(CoreTransformInterceptor)
+@ApiExcludeController()
 export class FeTagController {
    constructor(private tag: TagService, private transformer: TransformerPostService, private response: ResponseService) {}
 

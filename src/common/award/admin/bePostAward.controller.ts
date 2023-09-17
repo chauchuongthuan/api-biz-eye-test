@@ -25,50 +25,46 @@ import { Permissions } from '@src/core/services/permission.service';
 import { AwardService } from '../services/award.service';
 import { TransformerAwardService } from '../services/transformerAward.service';
 import { BeAwardDto } from '../dto/beAward.dto';
+import { TransformerPostAwardService } from '../services/transformerPostAward.service';
+import { AwardPostService } from '../services/postAward.service';
 
-@ApiTags('Admin/award')
-@Controller('admin/award')
+@ApiTags('Admin/Post Award')
+@Controller('admin/post-award')
 @UserSecure()
 @UseInterceptors(CoreTransformInterceptor, ActivityInterceptor)
 @ApiExcludeController()
-export class BeAwardController {
+export class BePostAwardController {
    constructor(
-      private awardService: AwardService,
-      private transformer: TransformerAwardService,
+      private awardService: AwardPostService,
+      private transformer: TransformerPostAwardService,
       private response: ResponseService,
-   ) {}
+   ) { }
 
-   // Find list categories
    @Get()
    @DefaultListQuery()
    async findAll(@Query() query: Record<string, any>): Promise<any> {
-      console.log('hi there');
       const items = await this.awardService.findAll(query);
       if (!items) return this.response.createdFail();
       return this.response.fetchListSuccess(await this.transformer.transformAwardList(items));
    }
 
-   // Create a new category
-
    @Post('')
    @HasFile()
-   async create(@Body() dto: BeAwardDto, @UploadedFiles() files: Record<any, any>): Promise<any> {
+   async create(@Body() dto: any, @UploadedFiles() files: Record<any, any>): Promise<any> {
+      console.log(123);
+
       const item = await this.awardService.create(dto, files);
       if (!item) return this.response.createdFail();
       return this.response.createdSuccess(await this.transformer.transformAwardetail(item));
    }
 
-   // Update category
-
    @Put(':id')
    @HasFile()
-   async update(@Param('id') id: string, @Body() dto: BeAwardDto): Promise<any> {
+   async update(@Param('id') id: string, @Body() dto: any): Promise<any> {
       const item = await this.awardService.update(id, dto);
       if (!item) return this.response.updatedFail();
       return this.response.updatedSuccess(await this.transformer.transformAwardetail(item));
    }
-
-   // Delete category
 
    @Delete()
    async deletes(@Body('ids') ids: Array<string>): Promise<any> {
@@ -76,8 +72,6 @@ export class BeAwardController {
       if (!item) return this.response.deletedFail();
       return this.response.deletedSuccess();
    }
-
-   // Get category by Id
 
    @Get(':id')
    async getById(@Param('id') id: string): Promise<any> {

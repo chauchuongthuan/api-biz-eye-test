@@ -9,7 +9,7 @@ import { DefaultListQuery } from '@src/core/decorators/defaultListQuery.decorato
 @Controller('posts')
 @UseInterceptors(CoreTransformInterceptor)
 export class FePostController {
-   constructor(private post: PostService, private transformer: TransformerPostService, private response: ResponseService) {}
+   constructor(private post: PostService, private transformer: TransformerPostService, private response: ResponseService) { }
 
    @Get()
    @applyDecorators(ApiQuery({ required: false, name: 'title', description: 'Title', example: 'Test name' }))
@@ -25,7 +25,10 @@ export class FePostController {
 
    @Get(':slug')
    async findBySlug(@Param('slug') slug: string): Promise<any> {
+      console.log(slug);
+
       const item = await this.post.findBySlug(slug);
+
       if (!item) return this.response.detailFail();
       return this.response.detailSuccess(await this.transformer.transformPostDetail(item));
    }

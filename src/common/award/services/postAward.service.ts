@@ -5,10 +5,11 @@ import { isIn, isNotEmpty } from 'class-validator';
 import { PaginateModel } from 'mongoose';
 import { Award } from '@src/schemas/awards/awards.schema';
 import { convertContentFileDto, saveThumbOrPhotos } from '@src/core/helpers/content';
+import { AwardPost } from '@src/schemas/awards/awardPost.schema';
 const moment = require('moment');
 @Injectable()
-export class AwardService {
-   constructor(@InjectModel(Award.name) private award: PaginateModel<Award>) { }
+export class AwardPostService {
+   constructor(@InjectModel(AwardPost.name) private award: PaginateModel<AwardPost>) { }
 
    async findAll(query: Record<string, any>): Promise<any> {
       const conditions = {};
@@ -59,7 +60,7 @@ export class AwardService {
 
       if (isNotEmpty(query.get)) {
          const get = parseInt(query.get);
-         const result = this.award.find(conditions).sort(sort).select(projection);
+         const result = this.award.find(conditions).sort(sort).populate(['category', 'award']).select(projection);
          return isNaN(get) ? result : result.limit(get);
       } else {
          return this.award.paginate(conditions, {
@@ -67,22 +68,24 @@ export class AwardService {
             page: query.page,
             limit: query.limit,
             sort: sort,
+            populate: ['category', 'award'],
          });
       }
    }
 
-   async findOne(query: Record<string, any>): Promise<Award> {
+   async findOne(query: Record<string, any>): Promise<AwardPost> {
       return this.award.findOne(query);
    }
 
-   async create(data: object, files: Record<any, any>): Promise<Award> {
-      await convertContentFileDto(data, files, ['image']);
+   async create(data: object, files: Record<any, any>): Promise<AwardPost> {
+      await convertContentFileDto(data, files, ['detailImage', 'image', 'social', 'gallery', 'metaImage']);
+
       const item = await new this.award(data).save();
       if (item) await saveThumbOrPhotos(item);
       return item;
    }
 
-   async update(id: string, data: object): Promise<Award> {
+   async update(id: string, data: object): Promise<AwardPost> {
       const item = await this.award.findByIdAndUpdate(id, data, { returnOriginal: false });
       return item;
    }
@@ -93,40 +96,5 @@ export class AwardService {
 
    async detail(id: string): Promise<Award> {
       return this.award.findById(id);
-   }
-
-   async findGroupByYear(): Promise<any> {
-      const aggregation = await this.award
-         .aggregate([
-            {
-               $group: {
-                  _id: '$year',
-                  documents: {
-                     $push: '$$ROOT',
-                  },
-               },
-            },
-            {
-               $project: {
-                  year: '$_id',
-                  documents: 1,
-                  _id: 0,
-               },
-            },
-         ])
-         .exec();
-
-      const result = {};
-      console.log(aggregation);
-      for (const group of aggregation) {
-         const filteredDocuments = group.documents.filter((document) => document.deletedAt === null);
-
-         for (const document of filteredDocuments) {
-            document.image = `${process.env.GC_URL}/${process.env.PREFIX_UPLOAD_URL}/awards/${document._id}/image/${document.image}`;
-         }
-         result[group.year] = filteredDocuments;
-      }
-
-      return result;
    }
 }

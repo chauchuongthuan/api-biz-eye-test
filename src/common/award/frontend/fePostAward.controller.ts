@@ -5,19 +5,22 @@ import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.inter
 import { saveFileContent } from '@core/helpers/content';
 import { AwardService } from '../services/award.service';
 import { TransformerAwardService } from '../services/transformerAward.service';
-@ApiTags('Frontend/award')
-@Controller('award')
+import { DefaultListQuery } from '@src/core/decorators/defaultListQuery.decorator';
+import { AwardPostService } from '../services/postAward.service';
+@ApiTags('Frontend/post-award')
+@Controller('post-award')
 @UseInterceptors(CoreTransformInterceptor)
-export class FeAwardController {
+export class FeAwardPostController {
    constructor(
-      private awardService: AwardService,
+      private awardService: AwardPostService,
       private transformer: TransformerAwardService,
       private response: ResponseService,
-   ) {}
+   ) { }
 
    @Get()
+   @DefaultListQuery()
    async getAll(@Query() query: Record<string, any>): Promise<any> {
-      const items = await this.awardService.findGroupByYear();
+      const items = await this.awardService.findAll(query);
       return this.response.fetchListSuccess(items);
    }
 }

@@ -4,7 +4,7 @@ import { HelperService } from '@core/services/helper.service';
 import { BePostDto } from './dto/bePost.dto';
 import { PostService } from '../services/post.service';
 import { TransformerPostService } from '../services/transformerPost.service';
-import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { UserSecure } from '@src/common/auth/user/decorators/userSecure.decorator';
 import { ACL } from '@common/auth/decorators/acl.decorator';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
@@ -19,6 +19,7 @@ import { UserAuth } from '@src/common/auth/user/decorators/user.decorator';
 import { User } from '@src/schemas/user/user.schemas';
 @ApiTags('Admin/Post')
 @Controller('admin/posts')
+@ApiExcludeController()
 @UseInterceptors(CoreTransformInterceptor, ActivityInterceptor)
 @UserSecure()
 export class BePostController {

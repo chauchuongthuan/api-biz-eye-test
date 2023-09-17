@@ -16,7 +16,7 @@ import { TransformerCustomerService } from '@common/customer/services/transforme
 import { ResponseService } from '@core/services/response.service';
 import { UserSecure } from '@common/auth/user/decorators/userSecure.decorator';
 import { HasFile } from '@core/decorators/hasFile.decorator';
-import { ApiBody, ApiTags, ApiHeader } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiHeader, ApiExcludeController } from '@nestjs/swagger';
 import { ActivityInterceptor } from '@core/interceptors/activity.interceptor';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
 import { DefaultListQuery } from '@core/decorators/defaultListQuery.decorator';
@@ -30,6 +30,7 @@ import { BeCategoryDto } from '../dto/beCategory.dto';
 @Controller('admin/category')
 @UserSecure()
 @UseInterceptors(CoreTransformInterceptor, ActivityInterceptor)
+@ApiExcludeController()
 export class BeCategoryController {
    constructor(
       private categoryService: CategoryService,

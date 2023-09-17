@@ -232,13 +232,13 @@ export class PostService {
       return item;
    }
 
-   async findBySlug(slug: string): Promise<Post> {
+   async findBySlug(slug: string): Promise<any> {
       const locale = this.request.locale;
       const conditions = {};
       conditions[`slug`] = slug;
       conditions[`active`] = true;
-      conditions['publishedAt'] = { $lte: moment().format('YYYY-MM-DD HH:mm:ss') };
-      return await this.post.findOne(conditions).populate('tags').populate('assigned');
+      // conditions['publishedAt'] = { $lte: moment().format('YYYY-MM-DD HH:mm:ss') };
+      return await this.post.findOne(conditions);
    }
 
    async create(data: object, files: Record<any, any>): Promise<Post> {

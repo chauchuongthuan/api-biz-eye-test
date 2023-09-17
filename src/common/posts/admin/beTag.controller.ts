@@ -3,7 +3,7 @@ import { ResponseService } from '@core/services/response.service';
 import { BeTagDto } from './dto/beTag.dto';
 import { TagService } from '../services/tag.service';
 import { TransformerPostService } from '@common/posts/services/transformerPost.service';
-import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { UserSecure } from '@src/common/auth/user/decorators/userSecure.decorator';
 import { ACL } from '@common/auth/decorators/acl.decorator';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
@@ -13,6 +13,7 @@ import { ActivityInterceptor } from '@core/interceptors/activity.interceptor';
 @Controller('admin/tags')
 @UseInterceptors(CoreTransformInterceptor, ActivityInterceptor)
 @UserSecure()
+@ApiExcludeController()
 export class BeTagController {
    constructor(private tag: TagService, private transformer: TransformerPostService, private response: ResponseService) {}
 

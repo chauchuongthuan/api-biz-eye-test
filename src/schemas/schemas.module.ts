@@ -29,6 +29,7 @@ import { Notification, NotificationSchema } from './notification.schema';
 import { Seen, SeenSchema } from './seens.schema';
 import { Expertise, ExpertiseSchema } from './expertise/expertise.schema';
 import { Award, AwardSchema } from './awards/awards.schema';
+import { AwardPost, AwardPostSchema } from './awards/awardPost.schema';
 
 const modelSchemas = [
    MongooseModule.forFeature([{ name: TokenBlacklist.name, schema: TokenBlacklistSchema }]),
@@ -82,8 +83,10 @@ const modelSchemas = [
    // Expertise
    MongooseModule.forFeature([{ name: Expertise.name, schema: ExpertiseSchema }]),
 
-   // Expertise
+   // Award
    MongooseModule.forFeature([{ name: Award.name, schema: AwardSchema }]),
+   // Award Post
+   MongooseModule.forFeature([{ name: AwardPost.name, schema: AwardPostSchema }]),
 ];
 
 @Module({

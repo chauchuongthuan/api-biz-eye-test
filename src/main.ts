@@ -13,6 +13,10 @@ const bodyParser = require('body-parser');
 import { tokenDrawModule } from './common/tokenDraw/tokenDraw.module';
 import { MarketingMailModule } from './common/marketingMail/marketingMail.module';
 import { AwardModule } from './common/award/award.module';
+import { CategoryModule } from './common/category/category.module';
+import { PostModule } from './common/posts/post.module';
+import { ExpertiseModule } from './common/expertise/expertise.module';
+import { PageModule } from './common/page/page.module';
 
 async function bootstrap() {
    async function createFileEvn() {
@@ -80,7 +84,7 @@ class Swagger {
    }
 
    register(extraModules?: any[], path?: string, title?: string, description?: string, version?: string): void {
-      const mainModules = [AuthModule, AwardModule];
+      const mainModules = [AuthModule, AwardModule, CategoryModule, PostModule, ExpertiseModule, PageModule];
       if (extraModules) {
          mainModules.push(...extraModules);
       }

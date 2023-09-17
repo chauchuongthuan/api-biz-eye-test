@@ -78,4 +78,4 @@ if (queueDriver == 'redis') imports.push(QueueModule);
    controllers: [AppController],
    providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

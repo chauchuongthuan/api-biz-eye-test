@@ -3,7 +3,7 @@ import { ResponseService } from '@core/services/response.service';
 import { BePostCommentDto } from './dto/bePostComment.dto';
 import { PostCommentService } from '../services/postComment.service';
 import { TransformerPostService } from '../services/transformerPost.service';
-import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { UserSecure } from '@src/common/auth/user/decorators/userSecure.decorator';
 import { ACL } from '@common/auth/decorators/acl.decorator';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
@@ -14,6 +14,7 @@ import { DefaultListQuery } from '@core/decorators/defaultListQuery.decorator';
 import { ActivityInterceptor } from '@core/interceptors/activity.interceptor';
 @ApiTags('Admin/PostComment')
 @Controller('admin/post-comments')
+@ApiExcludeController()
 @UseInterceptors(CoreTransformInterceptor, ActivityInterceptor)
 @UserSecure()
 export class BePostCommentController {

@@ -16,7 +16,7 @@ import { TransformerCustomerService } from '@common/customer/services/transforme
 import { ResponseService } from '@core/services/response.service';
 import { UserSecure } from '@common/auth/user/decorators/userSecure.decorator';
 import { HasFile } from '@core/decorators/hasFile.decorator';
-import { ApiBody, ApiTags, ApiHeader } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiHeader, ApiExcludeController } from '@nestjs/swagger';
 import { ActivityInterceptor } from '@core/interceptors/activity.interceptor';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
 import { DefaultListQuery } from '@core/decorators/defaultListQuery.decorator';
@@ -27,13 +27,14 @@ import { BeExpertiseDto } from '../dto/beExpertise.dto';
 @ApiTags('Admin/Expertise')
 @Controller('admin/expertise')
 @UserSecure()
+@ApiExcludeController()
 @UseInterceptors(CoreTransformInterceptor, ActivityInterceptor)
 export class BeExpertiseController {
    constructor(
       private expertiseService: ExpertiseService,
       private transformer: TransformerExpertiseService,
       private response: ResponseService,
-   ) {}
+   ) { }
 
    // Find list categories
    @Get()
