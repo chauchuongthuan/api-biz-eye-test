@@ -14,7 +14,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
-deployment
 
 # OS
 .DS_Store
