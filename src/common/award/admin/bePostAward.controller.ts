@@ -38,7 +38,7 @@ export class BePostAwardController {
       private awardService: AwardPostService,
       private transformer: TransformerPostAwardService,
       private response: ResponseService,
-   ) { }
+   ) {}
 
    @Get()
    @DefaultListQuery()
@@ -60,8 +60,8 @@ export class BePostAwardController {
 
    @Put(':id')
    @HasFile()
-   async update(@Param('id') id: string, @Body() dto: any): Promise<any> {
-      const item = await this.awardService.update(id, dto);
+   async update(@Param('id') id: string, @Body() dto: any, @UploadedFiles() files: Record<any, any>): Promise<any> {
+      const item = await this.awardService.update(id, dto, files);
       if (!item) return this.response.updatedFail();
       return this.response.updatedSuccess(await this.transformer.transformAwardetail(item));
    }

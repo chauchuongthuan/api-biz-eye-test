@@ -24,6 +24,18 @@ export class AwardPost extends Document implements TimestampInterface {
       required: true,
       trim: true,
    })
+   title: string;
+
+   @Prop({
+      trim: true,
+      default: null,
+   })
+   titleNon: string;
+
+   @Prop({
+      required: true,
+      trim: true,
+   })
    slug: string;
 
    @Prop({

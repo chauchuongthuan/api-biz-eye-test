@@ -6,12 +6,14 @@ import { PaginateModel } from 'mongoose';
 import { Award } from '@src/schemas/awards/awards.schema';
 import { convertContentFileDto, saveThumbOrPhotos } from '@src/core/helpers/content';
 import { AwardPost } from '@src/schemas/awards/awardPost.schema';
+import { HelperService } from '@src/core/services/helper.service';
 import { Category } from '@src/schemas/category/category.schema';
 import { Expertise } from '@src/schemas/expertise/expertise.schema';
 const moment = require('moment');
 @Injectable()
 export class AwardPostService {
    constructor(
+      private helper: HelperService,
       @InjectModel(AwardPost.name) private award: PaginateModel<AwardPost>,
       @InjectModel(Category.name) private category: PaginateModel<Category>,
       @InjectModel(Expertise.name) private expertise: PaginateModel<Expertise>,
@@ -31,9 +33,10 @@ export class AwardPostService {
          });
       }
 
-      if (isNotEmpty(query.name)) {
-         conditions['name'] = {
-            $regex: new RegExp(query.name, 'img'),
+      if (isNotEmpty(query.title)) {
+         let titleNon = this.helper.nonAccentVietnamese(query.title);
+         conditions['titleNon'] = {
+            $regex: new RegExp(titleNon, 'img'),
          };
       }
 
@@ -53,6 +56,24 @@ export class AwardPostService {
       if (isNotEmpty(query.nameNon)) {
          conditions['slug'] = {
             $regex: new RegExp(query.slug, 'img'),
+         };
+      }
+
+      if (isNotEmpty(query.category)) {
+         conditions['category'] = {
+            $in: query.category,
+         };
+      }
+
+      if (isNotEmpty(query.award)) {
+         conditions['award'] = {
+            $in: query.award,
+         };
+      }
+
+      if (isNotEmpty(query.expertise)) {
+         conditions['expertise'] = {
+            $in: query.expertise,
          };
       }
 
@@ -79,7 +100,7 @@ export class AwardPostService {
 
       if (isNotEmpty(query.get)) {
          const get = parseInt(query.get);
-         const result = this.award.find(conditions).sort(sort).populate(['category', 'award']).select(projection);
+         const result = this.award.find(conditions).sort(sort).populate(['category', 'award', 'expertise']).select(projection);
          return isNaN(get) ? result : result.limit(get);
       } else {
          return this.award.paginate(conditions, {
@@ -87,7 +108,7 @@ export class AwardPostService {
             page: query.page,
             limit: query.limit,
             sort: sort,
-            populate: ['category', 'award'],
+            populate: ['category', 'award', 'expertise'],
          });
       }
    }
@@ -98,14 +119,19 @@ export class AwardPostService {
 
    async create(data: object, files: Record<any, any>): Promise<AwardPost> {
       await convertContentFileDto(data, files, ['detailImage', 'image', 'social', 'gallery', 'metaImage']);
-
+      const titleNon = this.helper.nonAccentVietnamese(data['title']);
+      data['titleNon'] = titleNon;
       const item = await new this.award(data).save();
       if (item) await saveThumbOrPhotos(item);
       return item;
    }
 
-   async update(id: string, data: object): Promise<AwardPost> {
+   async update(id: string, data: object, files: Record<any, any>): Promise<AwardPost> {
+      await convertContentFileDto(data, files, ['detailImage', 'image', 'social', 'gallery', 'metaImage']);
+      const titleNon = this.helper.nonAccentVietnamese(data['title']);
+      data['titleNon'] = titleNon;
       const item = await this.award.findByIdAndUpdate(id, data, { returnOriginal: false });
+      if (item) await saveThumbOrPhotos(item);
       return item;
    }
 
@@ -114,6 +140,6 @@ export class AwardPostService {
    }
 
    async detail(id: string): Promise<Award> {
-      return this.award.findById(id);
+      return this.award.findById(id).populate('category').populate('award').populate('expertise');
    }
 }
