@@ -55,7 +55,7 @@ export class TransformerPostAwardService {
          impressions: doc.impressions,
          gallery: doc.gallery && doc.gallery.length > 0 ? photos(doc, 'gallery', 'Postawards') : [],
          social: doc.social && doc.social.length > 0 ? photos(doc, 'social', 'Postawards') : [],
-         award: doc.award,
+         // award: doc.award,
          awardImage: doc.award,
          category: doc.category,
          deletedAt: doc.deletedAt ? doc.deletedAt : null,

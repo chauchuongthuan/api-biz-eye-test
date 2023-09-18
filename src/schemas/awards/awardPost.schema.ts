@@ -8,7 +8,7 @@ import { Category } from '../category/category.schema';
 })
 export class AwardPost extends Document implements TimestampInterface {
    @Prop({
-      required: true,
+      required: false,
    })
    image: string;
 
@@ -38,7 +38,7 @@ export class AwardPost extends Document implements TimestampInterface {
    solution: string;
 
    @Prop({
-      required: true,
+      required: false,
    })
    detailImage: string;
 
@@ -146,6 +146,7 @@ AwardPostSchema.methods.thumbnail = function (): any {
       method: 'inside',
       fields: {
          detailImage: {},
+         image: {},
       },
    };
 };
