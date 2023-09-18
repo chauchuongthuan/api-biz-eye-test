@@ -1,6 +1,6 @@
-import { Controller, Get, Query, Param, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Query, Param, UseInterceptors, applyDecorators } from '@nestjs/common';
 import { ResponseService } from '@core/services/response.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
 import { saveFileContent } from '@core/helpers/content';
 import { AwardService } from '../services/award.service';
@@ -15,10 +15,24 @@ export class FeAwardPostController {
       private awardService: AwardPostService,
       private transformer: TransformerAwardService,
       private response: ResponseService,
-   ) { }
+   ) {}
 
    @Get()
    @DefaultListQuery()
+   @applyDecorators(
+      ApiQuery({
+         required: false,
+         name: 'category',
+         description: 'id of category',
+      }),
+   )
+   @applyDecorators(
+      ApiQuery({
+         required: false,
+         name: 'expertise',
+         description: 'id of expertise',
+      }),
+   )
    async getAll(@Query() query: Record<string, any>): Promise<any> {
       const items = await this.awardService.findAll(query);
       if (items) this.response.createdFail();

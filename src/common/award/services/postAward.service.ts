@@ -6,10 +6,16 @@ import { PaginateModel } from 'mongoose';
 import { Award } from '@src/schemas/awards/awards.schema';
 import { convertContentFileDto, saveThumbOrPhotos } from '@src/core/helpers/content';
 import { AwardPost } from '@src/schemas/awards/awardPost.schema';
+import { Category } from '@src/schemas/category/category.schema';
+import { Expertise } from '@src/schemas/expertise/expertise.schema';
 const moment = require('moment');
 @Injectable()
 export class AwardPostService {
-   constructor(@InjectModel(AwardPost.name) private award: PaginateModel<AwardPost>) { }
+   constructor(
+      @InjectModel(AwardPost.name) private award: PaginateModel<AwardPost>,
+      @InjectModel(Category.name) private category: PaginateModel<Category>,
+      @InjectModel(Expertise.name) private expertise: PaginateModel<Expertise>,
+   ) {}
 
    async findAll(query: Record<string, any>): Promise<any> {
       const conditions = {};
@@ -28,6 +34,19 @@ export class AwardPostService {
       if (isNotEmpty(query.name)) {
          conditions['name'] = {
             $regex: new RegExp(query.name, 'img'),
+         };
+      }
+
+      if (isNotEmpty(query.category)) {
+         conditions['category'] = {
+            $in: [query.category],
+         };
+      }
+
+      if (isNotEmpty(query.expertise)) {
+         console.log(query.expertise);
+         conditions['expertise'] = {
+            $in: [query.expertise],
          };
       }
 
