@@ -7,13 +7,16 @@ import { Award } from '@src/schemas/awards/awards.schema';
 import { convertContentFileDto, saveThumbOrPhotos } from '@src/core/helpers/content';
 import { AwardPost } from '@src/schemas/awards/awardPost.schema';
 import { HelperService } from '@src/core/services/helper.service';
+import { Category } from '@src/schemas/category/category.schema';
+import { Expertise } from '@src/schemas/expertise/expertise.schema';
 const moment = require('moment');
 @Injectable()
 export class AwardPostService {
    constructor(
-      @InjectModel(AwardPost.name)
-      private award: PaginateModel<AwardPost>,
       private helper: HelperService,
+      @InjectModel(AwardPost.name) private award: PaginateModel<AwardPost>,
+      @InjectModel(Category.name) private category: PaginateModel<Category>,
+      @InjectModel(Expertise.name) private expertise: PaginateModel<Expertise>,
    ) {}
 
    async findAll(query: Record<string, any>): Promise<any> {
@@ -34,6 +37,19 @@ export class AwardPostService {
          let titleNon = this.helper.nonAccentVietnamese(query.title);
          conditions['titleNon'] = {
             $regex: new RegExp(titleNon, 'img'),
+         };
+      }
+
+      if (isNotEmpty(query.category)) {
+         conditions['category'] = {
+            $in: [query.category],
+         };
+      }
+
+      if (isNotEmpty(query.expertise)) {
+         console.log(query.expertise);
+         conditions['expertise'] = {
+            $in: [query.expertise],
          };
       }
 

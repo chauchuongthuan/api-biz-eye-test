@@ -113,6 +113,14 @@ export class AwardPost extends Document implements TimestampInterface {
    ])
    category: any;
 
+   @Prop([
+      {
+         type: SchemaTypes.ObjectId,
+         ref: Expertise.name,
+      },
+   ])
+   expertise: any;
+
    @Prop({
       required: false,
       trim: true,
