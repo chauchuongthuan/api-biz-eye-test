@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, SchemaTypes } from 'mongoose';
 import { Award } from './awards.schema';
 import { Category } from '../category/category.schema';
+import { Expertise } from '../expertise/expertise.schema';
 @Schema({
    timestamps: true,
    collection: 'Postawards',
@@ -18,6 +19,18 @@ export class AwardPost extends Document implements TimestampInterface {
       type: String,
    })
    shortDescription: string;
+
+   @Prop({
+      required: true,
+      trim: true,
+   })
+   title: string;
+
+   @Prop({
+      trim: true,
+      default: null,
+   })
+   titleNon: string;
 
    @Prop({
       required: true,
@@ -83,6 +96,14 @@ export class AwardPost extends Document implements TimestampInterface {
       },
    ])
    award: any;
+
+   @Prop([
+      {
+         type: SchemaTypes.ObjectId,
+         ref: Expertise.name,
+      },
+   ])
+   expertise: any;
 
    @Prop([
       {
