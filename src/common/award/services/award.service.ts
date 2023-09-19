@@ -8,7 +8,7 @@ import { convertContentFileDto, saveThumbOrPhotos } from '@src/core/helpers/cont
 const moment = require('moment');
 @Injectable()
 export class AwardService {
-   constructor(@InjectModel(Award.name) private award: PaginateModel<Award>) { }
+   constructor(@InjectModel(Award.name) private award: PaginateModel<Award>) {}
 
    async findAll(query: Record<string, any>): Promise<any> {
       const conditions = {};
@@ -99,6 +99,14 @@ export class AwardService {
       const aggregation = await this.award
          .aggregate([
             {
+               $lookup: {
+                  from: 'Postawards',
+                  localField: '_id',
+                  foreignField: 'award',
+                  as: 'postAwards',
+               },
+            },
+            {
                $group: {
                   _id: '$year',
                   documents: {
@@ -109,6 +117,7 @@ export class AwardService {
             {
                $project: {
                   year: '$_id',
+
                   documents: 1,
                   _id: 0,
                },

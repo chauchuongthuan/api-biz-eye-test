@@ -27,6 +27,7 @@ import { TransformerAwardService } from '../services/transformerAward.service';
 import { BeAwardDto } from '../dto/beAward.dto';
 import { TransformerPostAwardService } from '../services/transformerPostAward.service';
 import { AwardPostService } from '../services/postAward.service';
+import { BePostAwardDto } from '../dto/bePostAward.dto';
 
 @ApiTags('Admin/Post Award')
 @Controller('admin/post-award')

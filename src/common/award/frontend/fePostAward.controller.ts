@@ -38,4 +38,12 @@ export class FeAwardPostController {
       if (items) this.response.createdFail();
       return this.response.fetchListSuccess(await this.transformer.transformAwardList(items));
    }
+
+   @Get(':slug')
+   async findBySlug(@Param('slug') slug: string): Promise<any> {
+      const item = await this.awardService.findBySlug(slug);
+
+      if (!item) return this.response.detailFail();
+      return this.response.detailSuccess(await this.transformer.transformAwarFrontend(item));
+   }
 }

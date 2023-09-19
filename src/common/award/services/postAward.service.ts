@@ -142,4 +142,12 @@ export class AwardPostService {
    async detail(id: string): Promise<Award> {
       return this.award.findById(id).populate('category').populate('award').populate('expertise');
    }
+
+   async findBySlug(slug: string): Promise<any> {
+      const conditions = {};
+      conditions[`slug`] = slug;
+      conditions[`active`] = true;
+      // conditions['publishedAt'] = { $lte: moment().format('YYYY-MM-DD HH:mm:ss') };
+      return await this.award.findOne(conditions);
+   }
 }
