@@ -62,8 +62,8 @@ export class BeAwardController {
 
    @Put(':id')
    @HasFile()
-   async update(@Param('id') id: string, @Body() dto: BeAwardDto): Promise<any> {
-      const item = await this.awardService.update(id, dto);
+   async update(@Param('id') id: string, @Body() dto: BeAwardDto, @UploadedFiles() files: Record<any, any>): Promise<any> {
+      const item = await this.awardService.update(id, dto, files);
       if (!item) return this.response.updatedFail();
       return this.response.updatedSuccess(await this.transformer.transformAwardetail(item));
    }
