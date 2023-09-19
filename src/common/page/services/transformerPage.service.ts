@@ -44,7 +44,7 @@ export class TransformerPageService {
          name: locale && isTranslate ? doc.name[locale] : doc.name,
          content: locale && isTranslate ? doc.content[locale] : doc.content,
          metaTitle: locale && isTranslate ? doc.metaTitle[locale] : doc.metaTitle,
-         metaImage: doc.thumbTrans('metaImage', 'FB', isTranslate ? locale : ''),
+         metaImage: doc.thumb('metaImage', 'FB'),
          metaDescription: locale && isTranslate ? doc.metaDescription[locale] : doc.metaDescription,
          metaKeyword: locale && isTranslate ? doc.metaKeyword[locale] : doc.metaKeyword,
          createdAt: moment(doc.createdAt).format(DateTime.CREATED_AT),

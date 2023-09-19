@@ -16,7 +16,7 @@ export class PageService {
       @InjectModel(Page.name) private pages: PaginateModel<Page>,
       private helperService: HelperService,
       private userService: UserService,
-   ) { }
+   ) {}
 
    async detail(id: string): Promise<any> {
       return this.pages.findOne({ _id: id, deleteAt: null });
@@ -119,7 +119,8 @@ export class PageService {
          fields = fields.filter((field) => isNotEmpty(field));
          this.assignStringFieldToObject(data, fields, file.filename);
       });
-
+      // console.log(`🚀files----->`, files);
+      // console.log(`🚀data----->`, data);
       const item = await this.pages.findByIdAndUpdate(id, data, { new: true });
 
       if (item) {
