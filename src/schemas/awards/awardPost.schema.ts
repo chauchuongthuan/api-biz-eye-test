@@ -148,6 +148,34 @@ export class AwardPost extends Document implements TimestampInterface {
    social: any;
 
    @Prop({
+      type: String,
+      required: false,
+      trim: true,
+   })
+   metaTitle: string;
+
+   @Prop({
+      type: String,
+      required: false,
+      trim: true,
+   })
+   metaImage: string;
+
+   @Prop({
+      type: String,
+      required: false,
+      trim: true,
+   })
+   metaDescription: string;
+
+   @Prop({
+      type: String,
+      required: false,
+      trim: true,
+   })
+   metaKeyword: string;
+
+   @Prop({
       default: null,
    })
    deletedAt: Date;
@@ -168,6 +196,7 @@ AwardPostSchema.methods.thumbnail = function (): any {
       fields: {
          detailImage: {},
          image: {},
+         metaImage: {},
       },
    };
 };
