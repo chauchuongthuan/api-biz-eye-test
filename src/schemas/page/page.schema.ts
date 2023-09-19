@@ -55,8 +55,6 @@ PageSchema.methods.thumbnail = function (): any {
       fields: {
          bannerImg: {},
          bannerImgMb: {},
-      },
-      fieldTrans: {
          metaImage: {
             FB: '600x314',
          },
