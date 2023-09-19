@@ -82,8 +82,10 @@ export class AwardService {
       return item;
    }
 
-   async update(id: string, data: object): Promise<Award> {
+   async update(id: string, data: object, files: Record<any, any>): Promise<Award> {
+      await convertContentFileDto(data, files, ['image']);
       const item = await this.award.findByIdAndUpdate(id, data, { returnOriginal: false });
+      if (item) await saveThumbOrPhotos(item);
       return item;
    }
 

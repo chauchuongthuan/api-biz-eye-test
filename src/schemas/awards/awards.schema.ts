@@ -63,7 +63,7 @@ export class Award extends Document implements TimestampInterface {
    active: boolean;
 
    @Prop({
-      required: true,
+      required: false,
    })
    image: string;
 

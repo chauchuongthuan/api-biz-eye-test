@@ -27,9 +27,9 @@ export class BeAwardDto {
 
    @IsOptional()
    @MaxLength(255)
-   @IsExistFileTmp([], {
-      message: 'Ảnh đại diện không hợp lệ!',
-   })
+   // @IsExistFileTmp([], {
+   //    message: 'Ảnh đại diện không hợp lệ!',
+   // })
    image: any;
 
    @IsNotEmpty({ message: 'Active là bắt buộc!' })
