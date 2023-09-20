@@ -29,17 +29,17 @@ export class BePostAwardDto {
    @ApiProperty()
    client: string;
 
-   @IsNotEmpty({ message: 'Followers là bắt buộc!' })
-   @ApiProperty()
-   followers: string;
+   // @IsNotEmpty({ message: 'Followers là bắt buộc!' })
+   // @ApiProperty()
+   // followers: string;
 
-   @IsNotEmpty({ message: 'Engagement Rate là bắt buộc!' })
-   @ApiProperty()
-   engagementRate: string;
+   // @IsNotEmpty({ message: 'Engagement Rate là bắt buộc!' })
+   // @ApiProperty()
+   // engagementRate: string;
 
-   @IsNotEmpty({ message: 'Impressions là bắt buộc!' })
-   @ApiProperty()
-   impressions: string;
+   // @IsNotEmpty({ message: 'Impressions là bắt buộc!' })
+   // @ApiProperty()
+   // impressions: string;
 
    @IsNotEmpty({ message: 'Award là bắt buộc!' })
    @ApiProperty()
@@ -86,6 +86,13 @@ export class BePostAwardDto {
    //    message: 'Ảnh đại diện không hợp lệ!',
    // })
    detailImage: any;
+
+   @IsOptional()
+   @MaxLength(255)
+   // @IsExistFileTmp([], {
+   //    message: 'Ảnh đại diện không hợp lệ!',
+   // })
+   thumbnailVideo: any;
 
    @ApiProperty({
       description: 'metaTitle',
