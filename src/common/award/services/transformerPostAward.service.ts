@@ -42,7 +42,7 @@ export class TransformerPostAwardService {
       }
       return {
          id: doc._id,
-         isHost: doc?.isHost ? doc?.isHost : false,
+         isHot: doc?.isHot ? doc?.isHot : false,
          image: doc.thumb('image'),
          thumbnailVideo: doc.thumb('thumbnailVideo'),
          shortDescription: doc.shortDescription,

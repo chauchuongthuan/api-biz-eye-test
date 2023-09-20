@@ -67,7 +67,7 @@ export class BePostAwardDto {
 
    @IsOptional()
    @ApiProperty()
-   isHost: any;
+   isHot: any;
 
    @IsOptional()
    @ApiProperty()

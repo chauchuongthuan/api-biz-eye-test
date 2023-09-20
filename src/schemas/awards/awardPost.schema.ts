@@ -23,7 +23,7 @@ export class AwardPost extends Document implements TimestampInterface {
       trim: true,
       default: false,
    })
-   isHost: boolean;
+   isHot: boolean;
 
    @Prop({
       required: true,
