@@ -87,6 +87,13 @@ export class BePostAwardDto {
    // })
    detailImage: any;
 
+   @IsOptional()
+   @MaxLength(255)
+   // @IsExistFileTmp([], {
+   //    message: 'Ảnh đại diện không hợp lệ!',
+   // })
+   thumbnailVideo: any;
+
    @ApiProperty({
       description: 'metaTitle',
       required: false,

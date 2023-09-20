@@ -44,6 +44,7 @@ export class TransformerPostAwardService {
          id: doc._id,
          isHost: doc?.isHost ? doc?.isHost : false,
          image: doc.thumb('image'),
+         thumbnailVideo: doc.thumb('thumbnailVideo'),
          shortDescription: doc.shortDescription,
          title: doc.title,
          slug: doc.slug,

@@ -14,6 +14,11 @@ export class AwardPost extends Document implements TimestampInterface {
    image: string;
 
    @Prop({
+      required: false,
+   })
+   thumbnailVideo: string;
+
+   @Prop({
       required: true,
       trim: true,
       default: false,
@@ -204,6 +209,7 @@ AwardPostSchema.methods.thumbnail = function (): any {
          detailImage: {},
          image: {},
          metaImage: {},
+         thumbnailVideo: {},
       },
    };
 };
