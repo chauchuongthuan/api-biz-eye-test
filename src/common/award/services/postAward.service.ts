@@ -28,7 +28,7 @@ export class AwardPostService {
       sort[query.orderBy] = query.order;
 
       const projection = {};
-
+      conditions['isHot'] = false;
       if (isNotEmpty(query.selects)) {
          query.selects.split(',').forEach((select) => {
             projection[select] = 1;
