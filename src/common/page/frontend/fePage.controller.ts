@@ -27,7 +27,7 @@ export class FePageController {
       private pageService: PageService,
       private response: ResponseService,
       private transformer: TransformerPageService,
-   ) { }
+   ) {}
 
    @Get()
    @DefaultListQuery()
@@ -41,7 +41,7 @@ export class FePageController {
       ApiQuery({
          required: false,
          name: 'pageCode',
-         description: 'Page code: HOME, ABOUT',
+         description: 'Page code: HOME, ABOUT, AWARD, NEWS, CONTACT, WORK',
          example: 'HOME',
       }),
    )
