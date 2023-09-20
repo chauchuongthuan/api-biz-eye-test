@@ -122,8 +122,8 @@ export class AwardPostService {
       const titleNon = this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
       const item = await new this.award(data).save();
-      if (item.isHost == true) {
-         await this.award.updateMany({ _id: { $ne: item._id } }, { isHost: false });
+      if (item.isHot == true) {
+         await this.award.updateMany({ _id: { $ne: item._id } }, { isHot: false });
       }
       if (item) await saveThumbOrPhotos(item);
       return item;
@@ -134,9 +134,9 @@ export class AwardPostService {
       const titleNon = this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
       const item = await this.award.findByIdAndUpdate(id, data, { returnOriginal: false });
-      if (item.isHost == true) {
+      if (item.isHot == true) {
          console.log('item::', item);
-         await this.award.updateMany({ _id: { $ne: item._id } }, { isHost: false });
+         await this.award.updateMany({ _id: { $ne: item._id } }, { isHot: false });
       }
       if (item) await saveThumbOrPhotos(item);
       return item;
