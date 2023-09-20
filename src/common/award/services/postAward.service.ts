@@ -34,7 +34,7 @@ export class AwardPostService {
       }
 
       if (isNotEmpty(query.title)) {
-         let titleNon = this.helper.nonAccentVietnamese(query.title);
+         const titleNon = this.helper.nonAccentVietnamese(query.title);
          conditions['titleNon'] = {
             $regex: new RegExp(titleNon, 'img'),
          };
@@ -148,6 +148,6 @@ export class AwardPostService {
       conditions[`slug`] = slug;
       conditions[`active`] = true;
       // conditions['publishedAt'] = { $lte: moment().format('YYYY-MM-DD HH:mm:ss') };
-      return await this.award.findOne(conditions);
+      return await this.award.findOne(conditions).populate('category').populate('award').populate('expertise');
    }
 }
