@@ -40,13 +40,22 @@ export class TransformerAwardService {
       //    result[group.year] = group.documents;
       // }
       // console.log(result);
+      let url = '';
 
+      if (doc?.award?.length > 0) {
+         url = `${process.env.GC_URL}/${process.env.PREFIX_UPLOAD_URL}/awards/${doc?.award[0]._id}/image/${doc?.award[0].image}`;
+      }
+      if (doc && doc.award && doc.award[0]) {
+         doc.award[0].image = url;
+      }
       return {
          id: doc._id,
          title: doc.title,
          client: doc.client,
          subTitle: doc.subTitle,
          slug: doc.slug,
+         // award: doc.award,
+         award: doc.award,
          shortDescription: doc.shortDescription,
          image: doc.thumb('image'),
          sortOrder: doc.sortOrder,

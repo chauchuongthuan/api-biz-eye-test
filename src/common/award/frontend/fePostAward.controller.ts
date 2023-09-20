@@ -11,7 +11,7 @@ import { TransformerPostAwardService } from '../services/transformerPostAward.se
 export class FeAwardPostController {
    constructor(
       private awardService: AwardPostService,
-      private transformer: TransformerPostAwardService,
+      private transformerPost: TransformerPostAwardService,
       private response: ResponseService,
    ) {}
 
@@ -34,7 +34,7 @@ export class FeAwardPostController {
    async getAll(@Query() query: Record<string, any>): Promise<any> {
       const items = await this.awardService.findAll(query);
       if (items) this.response.createdFail();
-      return this.response.fetchListSuccess(await this.transformer.transformAwardList(items));
+      return this.response.fetchListSuccess(await this.transformerPost.transformAwardList(items));
    }
 
    @Get(':slug')
@@ -42,6 +42,7 @@ export class FeAwardPostController {
       const item = await this.awardService.findBySlug(slug);
 
       if (!item) return this.response.detailFail();
-      return this.response.detailSuccess(await this.transformer.transformAwardetail(item));
+      console.log(item);
+      return this.response.detailSuccess(await this.transformerPost.transformAwardetail(item));
    }
 }
