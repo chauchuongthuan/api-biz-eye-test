@@ -42,6 +42,7 @@ export class TransformerPostAwardService {
       }
       return {
          id: doc._id,
+         isHost: doc?.isHost ? doc?.isHost : false,
          image: doc.thumb('image'),
          shortDescription: doc.shortDescription,
          title: doc.title,
@@ -51,7 +52,7 @@ export class TransformerPostAwardService {
          video: doc.video,
          detailImage: doc.thumb('detailImage'),
          client: doc.client,
-         shareOfVoice: doc.shareOfVoice,
+         shareOfVoice: doc?.shareOfVoice ? doc?.shareOfVoice : [],
          followers: doc.followers,
          engagementRate: doc.engagementRate,
          impressions: doc.impressions,
