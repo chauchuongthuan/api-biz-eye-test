@@ -16,6 +16,13 @@ export class AwardPost extends Document implements TimestampInterface {
    @Prop({
       required: true,
       trim: true,
+      default: false,
+   })
+   isHost: boolean;
+
+   @Prop({
+      required: true,
+      trim: true,
       type: String,
    })
    shortDescription: string;
@@ -64,9 +71,9 @@ export class AwardPost extends Document implements TimestampInterface {
    @Prop({
       required: true,
       trim: true,
-      type: String,
+      type: Array,
    })
-   shareOfVoice: string;
+   shareOfVoice: any;
 
    @Prop({
       required: true,

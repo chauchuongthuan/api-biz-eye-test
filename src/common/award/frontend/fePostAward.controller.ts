@@ -2,9 +2,6 @@ import { Controller, Get, Query, Param, UseInterceptors, applyDecorators } from 
 import { ResponseService } from '@core/services/response.service';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CoreTransformInterceptor } from '@core/interceptors/coreTransform.interceptor';
-import { saveFileContent } from '@core/helpers/content';
-import { AwardService } from '../services/award.service';
-import { TransformerAwardService } from '../services/transformerAward.service';
 import { DefaultListQuery } from '@src/core/decorators/defaultListQuery.decorator';
 import { AwardPostService } from '../services/postAward.service';
 import { TransformerPostAwardService } from '../services/transformerPostAward.service';
@@ -14,7 +11,6 @@ import { TransformerPostAwardService } from '../services/transformerPostAward.se
 export class FeAwardPostController {
    constructor(
       private awardService: AwardPostService,
-      private transformer: TransformerAwardService,
       private transformerPost: TransformerPostAwardService,
       private response: ResponseService,
    ) {}
@@ -38,7 +34,7 @@ export class FeAwardPostController {
    async getAll(@Query() query: Record<string, any>): Promise<any> {
       const items = await this.awardService.findAll(query);
       if (items) this.response.createdFail();
-      return this.response.fetchListSuccess(await this.transformer.transformAwardList(items));
+      return this.response.fetchListSuccess(await this.transformerPost.transformAwardList(items));
    }
 
    @Get(':slug')

@@ -11,7 +11,7 @@ export class BePostAwardDto {
 
    @IsNotEmpty({ message: 'Share Of Voice là bắt buộc!' })
    @ApiProperty()
-   shareOfVoice: string;
+   shareOfVoice: any;
 
    @IsNotEmpty({ message: 'Short Description là bắt buộc!' })
    @ApiProperty()
@@ -64,6 +64,10 @@ export class BePostAwardDto {
    @IsOptional()
    @ApiProperty()
    active: any;
+
+   @IsOptional()
+   @ApiProperty()
+   isHost: any;
 
    @IsOptional()
    @ApiProperty()
