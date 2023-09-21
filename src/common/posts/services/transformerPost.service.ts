@@ -132,6 +132,7 @@ export class TransformerPostService {
          image: doc.thumb('image'),
          imageMb: doc.thumb('imageMb'),
          title: doc.title,
+         isHot: doc.isHot,
          slug: doc.slug,
          shortDescription: doc.shortDescription,
          content: doc.content,

@@ -21,108 +21,6 @@ export class AwardPostService {
       private transformerPostAwardService: TransformerPostAwardService,
    ) {}
 
-   async findAllFe(query: Record<string, any>): Promise<any> {
-      const conditions = {};
-      conditions['deletedAt'] = null;
-      const sort = Object();
-      sort[query.orderBy] = query.order;
-
-      const projection = {};
-      conditions['isHot'] = false;
-      if (isNotEmpty(query.selects)) {
-         query.selects.split(',').forEach((select) => {
-            projection[select] = 1;
-         });
-      }
-
-      if (isNotEmpty(query.title)) {
-         const titleNon = this.helper.nonAccentVietnamese(query.title);
-         conditions['titleNon'] = {
-            $regex: new RegExp(titleNon, 'img'),
-         };
-      }
-
-      if (isNotEmpty(query.category)) {
-         conditions['category'] = {
-            $in: [query.category],
-         };
-      }
-
-      if (isNotEmpty(query.expertise)) {
-         console.log(query.expertise);
-         conditions['expertise'] = {
-            $in: [query.expertise],
-         };
-      }
-
-      if (isNotEmpty(query.nameNon)) {
-         conditions['slug'] = {
-            $regex: new RegExp(query.slug, 'img'),
-         };
-      }
-
-      if (isNotEmpty(query.category)) {
-         conditions['category'] = {
-            $in: query.category,
-         };
-      }
-
-      if (isNotEmpty(query.award)) {
-         conditions['award'] = {
-            $in: query.award,
-         };
-      }
-
-      if (isNotEmpty(query.expertise)) {
-         conditions['expertise'] = {
-            $in: query.expertise,
-         };
-      }
-
-      if (isNotEmpty(query.idNotIn)) {
-         conditions['_id'] = {
-            $nin: query.idNotIn,
-         };
-      }
-
-      if (isNotEmpty(query.idIn)) {
-         conditions['_id'] = {
-            $in: query.idIn,
-         };
-      }
-
-      if (isNotEmpty(query.createdFrom) || isNotEmpty(query.createdTo)) {
-         const createdFrom = moment(query.createdFrom || '1000-01-01').startOf('day');
-         const createdTo = moment(query.createdTo || '3000-01-01').endOf('day');
-         conditions[`createdAt`] = {
-            $gte: createdFrom,
-            $lte: createdTo,
-         };
-      }
-
-      let hot;
-
-      if (query.page == 1) {
-         let post = await this.award.findOne({ isHot: true }).populate(['category', 'award', 'expertise']);
-         if (post) hot = await this.transformerPostAwardService.transformAwardetail(post);
-      }
-      if (isNotEmpty(query.get)) {
-         const get = parseInt(query.get);
-         const result = this.award.find(conditions).sort(sort).populate(['category', 'award', 'expertise']).select(projection);
-         return isNaN(get) ? result : result.limit(get);
-      } else {
-         return {
-            data: await this.award.paginate(conditions, {
-               select: projection,
-               page: query.page,
-               limit: query.limit,
-               sort: sort,
-               populate: ['category', 'award', 'expertise'],
-            }),
-            hot,
-         };
-      }
-   }
    async findAll(query: Record<string, any>): Promise<any> {
       const conditions = {};
       conditions['deletedAt'] = null;
@@ -226,9 +124,6 @@ export class AwardPostService {
       const titleNon = this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
       const item = await new this.award(data).save();
-      if (item.isHot == true) {
-         await this.award.updateMany({ _id: { $ne: item._id } }, { isHot: false });
-      }
       if (item) await saveThumbOrPhotos(item);
       return item;
    }
@@ -238,10 +133,6 @@ export class AwardPostService {
       const titleNon = this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
       const item = await this.award.findByIdAndUpdate(id, data, { returnOriginal: false });
-      if (item.isHot == true) {
-         console.log('item::', item);
-         await this.award.updateMany({ _id: { $ne: item._id } }, { isHot: false });
-      }
       if (item) await saveThumbOrPhotos(item);
       return item;
    }
