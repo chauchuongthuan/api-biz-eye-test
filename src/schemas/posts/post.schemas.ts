@@ -19,6 +19,13 @@ export class Post extends Document {
    author: any;
 
    @Prop({
+      required: true,
+      trim: true,
+      default: false,
+   })
+   isHot: boolean;
+
+   @Prop({
       index: true,
       type: SchemaTypes.ObjectId,
       ref: User.name,

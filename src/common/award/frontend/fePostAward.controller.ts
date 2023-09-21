@@ -32,11 +32,8 @@ export class FeAwardPostController {
       }),
    )
    async getAll(@Query() query: Record<string, any>): Promise<any> {
-      const item = await this.awardService.findAllFe(query);
-      // if (items.data) this.response.createdFail();
-      let data = await this.transformerPost.transformAwardList(item.data);
-      let hot = item?.hot;
-      return this.response.fetchListSuccess({ ...data, isHot: hot });
+      const items = await this.awardService.findAll(query);
+      return this.response.fetchListSuccess(await this.transformerPost.transformAwardList(items));
    }
 
    @Get(':slug')

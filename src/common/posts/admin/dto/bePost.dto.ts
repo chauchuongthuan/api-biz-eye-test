@@ -86,6 +86,14 @@ export class BePostDto {
    content: string;
 
    @ApiProperty({
+      type: Object,
+      description: 'isHot',
+      required: false,
+   })
+   @IsNotEmpty()
+   isHot: boolean;
+
+   @ApiProperty({
       type: Number,
       description: 'status',
       required: true,

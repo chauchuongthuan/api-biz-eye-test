@@ -21,13 +21,6 @@ export class AwardPost extends Document implements TimestampInterface {
    @Prop({
       required: true,
       trim: true,
-      default: false,
-   })
-   isHot: boolean;
-
-   @Prop({
-      required: true,
-      trim: true,
       type: String,
    })
    shortDescription: string;
