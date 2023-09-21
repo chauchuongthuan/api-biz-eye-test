@@ -37,15 +37,20 @@ export class SettingService {
             await saveFile(file['filename'], `setting`);
          }),
       );
-      // await this.setting.find({}, function (error, docs) {
-      //     docs.forEach(function (doc) {
-      //         if (isFile(doc.value) && !oldFiles.includes(doc.value)) {
-      //             deleteFile(doc.value, `setting`);
-      //         }
-      //         doc.remove();
-      //     });
-      // }).clone.catch(function (err) { console.log(err) });
-      await this.setting.deleteMany({});
+      try {
+         const docs = await this.setting.find({});
+         for (const doc of docs) {
+            if (isFile(doc.value) && !oldFiles.includes(doc.value)) {
+               deleteFile(doc.value, 'setting');
+            }
+            if (!doc.name.includes('access')) {
+               await doc.remove();
+            }
+         }
+      } catch (err) {
+         console.log(err);
+      }
+      // await this.setting.deleteMany({});
       await this.setting.insertMany(settings);
       return this.setting.find().exec();
    }

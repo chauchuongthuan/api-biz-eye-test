@@ -27,7 +27,7 @@ export class BeSettingController {
    @ApiExcludeEndpoint()
    async findAll(): Promise<any> {
       const items = await this.settingService.findAll();
-      return this.responseService.fetchListSuccess(await this.transformerSettingService.transformSettingList(items));
+      return this.responseService.fetchListSuccess(this.transformerSettingService.transformSettingList(items));
    }
 
    @Post()
@@ -44,6 +44,6 @@ export class BeSettingController {
    @ApiExcludeEndpoint()
    async add(@UploadedFiles() files, @Body() body: any): Promise<any> {
       const items = await this.settingService.update(body, files);
-      return this.responseService.updatedSuccess(await this.transformerSettingService.transformSettingList(items));
+      return this.responseService.updatedSuccess(this.transformerSettingService.transformSettingList(items));
    }
 }
