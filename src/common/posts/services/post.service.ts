@@ -9,6 +9,7 @@ import { convertContentFileDto, deleteSpecifyFile, saveFileContent, saveThumbOrP
 import { TagService } from '@common/posts/services/tag.service';
 import { HelperService } from '@core/services/helper.service';
 import { UserService } from '@src/common/users/services/user.service';
+import { TransformerPostService } from './transformerPost.service';
 const moment = require('moment');
 const sgMail = require('@sendgrid/mail');
 @Injectable()
@@ -24,6 +25,7 @@ export class PostService {
       private tag: TagService,
       private userService: UserService,
       private helper: HelperService,
+      private transformerPostService: TransformerPostService,
    ) {
       this.locale = this.request.locale == 'vi' ? 'viNon' : this.request.locale;
       this.user = this.request.user;
@@ -159,6 +161,7 @@ export class PostService {
       sort[query.orderBy] = query.order;
 
       const projection = {};
+      conditions['isHot'] = false;
 
       if (isNotEmpty(query.selects)) {
          query.selects.split(',').forEach((select) => {
@@ -210,19 +213,28 @@ export class PostService {
             $lte: createdTo,
          };
       }
+      let hot;
 
+      if (query.page == 1) {
+         let post = await this.post.findOne({ isHot: true }).populate(['tags', 'assigned']);
+         if (post) hot = await this.transformerPostService.transformPostDetail(post);
+      }
+      console.log(`🚀hot----->`, hot);
       if (isNotEmpty(query.get)) {
          const get = parseInt(query.get);
          const result = this.post.find(conditions).sort(sort).select(projection);
-         return isNaN(get) ? result : result.limit(get);
+         return isNaN(get) ? { data: await result, hot } : { data: await result.limit(get), hot };
       } else {
-         return this.post.paginate(conditions, {
-            populate: query.populate || ['tags', 'assigned'],
-            select: projection,
-            page: query.page,
-            limit: query.limit,
-            sort: sort,
-         });
+         return {
+            data: await this.post.paginate(conditions, {
+               populate: query.populate || ['tags', 'assigned'],
+               select: projection,
+               page: query.page,
+               limit: query.limit,
+               sort: sort,
+            }),
+            hot,
+         };
       }
    }
 
@@ -256,6 +268,7 @@ export class PostService {
       const self = this;
       const tagIds = [];
       const userId = [];
+
       //
       await convertContentFileDto(data, files, ['image', 'imageMb', 'metaImage', 'gallery']);
 
@@ -280,6 +293,9 @@ export class PostService {
       //    this.sendMailSendGrid(data, 'tạo mới và phân công cho bạn');
       // }
       const item = await new this.post(data).save();
+      if (item.isHot == true) {
+         await this.post.updateMany({ _id: { $ne: item._id } }, { isHot: false });
+      }
       if (item) {
          await saveThumbOrPhotos(item);
       }
@@ -318,7 +334,7 @@ export class PostService {
    }
 
    async update(id: string, data: object, files: Record<any, any>): Promise<any> {
-      let item = await this.findById(id);
+      let item: any = await this.findById(id);
       if (!item) return false;
       const titleNon = await this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
@@ -330,6 +346,9 @@ export class PostService {
       //    this.sendMailSendGrid(data, 'cập nhật nội dung');
       // }
       item = await this.post.findByIdAndUpdate(id, data, { new: true });
+      if (item.isHot == true) {
+         await this.post.updateMany({ _id: { $ne: item._id } }, { isHot: false });
+      }
       if (item) await saveThumbOrPhotos(item);
       return item;
    }
