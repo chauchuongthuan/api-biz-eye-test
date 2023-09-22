@@ -17,6 +17,7 @@ import { CategoryModule } from './common/category/category.module';
 import { PostModule } from './common/posts/post.module';
 import { ExpertiseModule } from './common/expertise/expertise.module';
 import { PageModule } from './common/page/page.module';
+import { SettingModule } from './common/setting/setting.module';
 
 async function bootstrap() {
    async function createFileEvn() {
@@ -74,7 +75,7 @@ async function bootstrap() {
 }
 
 class Swagger {
-   constructor(private app: NestExpressApplication) { }
+   constructor(private app: NestExpressApplication) {}
 
    /**
     * Register more swagger api here
@@ -84,7 +85,7 @@ class Swagger {
    }
 
    register(extraModules?: any[], path?: string, title?: string, description?: string, version?: string): void {
-      const mainModules = [AuthModule, AwardModule, CategoryModule, PostModule, ExpertiseModule, PageModule];
+      const mainModules = [AuthModule, AwardModule, CategoryModule, PostModule, ExpertiseModule, PageModule, SettingModule];
       if (extraModules) {
          mainModules.push(...extraModules);
       }
