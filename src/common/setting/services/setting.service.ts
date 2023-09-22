@@ -11,7 +11,9 @@ export class SettingService {
       @InjectModel(Post.name) private post: PaginateModel<Post>,
    ) {}
 
-   async findAll(): Promise<any> {
+   async findAll(isFe = false): Promise<any> {
+      let nameNotIn = ['access', 'accessByMonth', 'accessByMinute', 'accessByMobile', 'accessByWindow'];
+      if (isFe) return this.setting.find({ name: { $nin: nameNotIn } }).exec();
       return this.setting.find().exec();
    }
 

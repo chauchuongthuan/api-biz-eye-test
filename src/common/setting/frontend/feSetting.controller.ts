@@ -18,8 +18,7 @@ export class FeSettingController {
 
    @Get()
    async findAll(): Promise<any> {
-      const data = {};
-      const items = await this.settingService.findAll();
+      const items = await this.settingService.findAll(true);
       return this.responseService.fetchListSuccess(await this.transformerSettingService.transformSettingList(items));
    }
 }
