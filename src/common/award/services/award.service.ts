@@ -124,20 +124,38 @@ export class AwardService {
                   _id: 0,
                },
             },
+            {
+               $match: {
+                  'documents.deletedAt': null,
+               },
+            },
+            {
+               $sort: {
+                  year: -1, // Sort by year in descending order
+               },
+            },
          ])
          .exec();
 
       const result = {};
       console.log(aggregation);
       for (const group of aggregation) {
-         const filteredDocuments = group.documents.filter((document) => document.deletedAt === null);
-
+         const filteredDocuments = await group.documents.filter((document) => document.deletedAt === null);
          for (const document of filteredDocuments) {
             document.image = `${process.env.GC_URL}/${process.env.PREFIX_UPLOAD_URL}/awards/${document._id}/image/${document.image}`;
          }
          result[group.year] = filteredDocuments;
       }
+      // const sorted = Object.fromEntries(
+      //    Object.entries(result).sort((x: any, y: any) => {
+      //       console.log('x::', x);
+      //       console.log('y::', y);
+      //       return x[0] > y[0] ? -1 : 1;
+      //    }),
+      // );
 
+      // console.log('sorted:', sorted);
+      // console.log('result::', result);
       return result;
    }
 }
