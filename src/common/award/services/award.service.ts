@@ -116,12 +116,20 @@ export class AwardService {
                   },
                },
             },
+
             {
                $project: {
                   year: '$_id',
 
                   documents: 1,
                   _id: 0,
+               },
+            },
+            {
+               $set: {
+                  year: {
+                     $concat: [' ', '$year', ' '],
+                  },
                },
             },
             {
@@ -146,16 +154,8 @@ export class AwardService {
          }
          result[group.year] = filteredDocuments;
       }
-      // const sorted = Object.fromEntries(
-      //    Object.entries(result).sort((x: any, y: any) => {
-      //       console.log('x::', x);
-      //       console.log('y::', y);
-      //       return x[0] > y[0] ? -1 : 1;
-      //    }),
-      // );
+      console.log('result::', result);
 
-      // console.log('sorted:', sorted);
-      // console.log('result::', result);
       return result;
    }
 }
