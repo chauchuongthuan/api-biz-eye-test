@@ -46,6 +46,7 @@ export class TransformerPostAwardService {
          image: doc.thumb('image'),
          thumbnailVideo: doc.thumb('thumbnailVideo'),
          shortDescription: doc.shortDescription,
+         description: doc.description,
          title: doc.title,
          slug: doc.slug,
          challenge: doc.challenge,
