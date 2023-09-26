@@ -79,26 +79,26 @@ export class AwardPost extends Document implements TimestampInterface {
    })
    shareOfVoice: any;
 
-   @Prop({
-      required: true,
-      trim: true,
-      type: String,
-   })
-   followers: string;
+   // @Prop({
+   //    required: true,
+   //    trim: true,
+   //    type: String,
+   // })
+   // followers: string;
 
-   @Prop({
-      required: true,
-      trim: true,
-      type: String,
-   })
-   engagementRate: string;
+   // @Prop({
+   //    required: true,
+   //    trim: true,
+   //    type: String,
+   // })
+   // engagementRate: string;
 
-   @Prop({
-      required: true,
-      trim: true,
-      type: String,
-   })
-   impressions: string;
+   // @Prop({
+   //    required: true,
+   //    trim: true,
+   //    type: String,
+   // })
+   // impressions: string;
 
    @Prop([
       {

@@ -116,6 +116,7 @@ export class AwardService {
                   },
                },
             },
+
             {
                $project: {
                   year: '$_id',
@@ -124,19 +125,36 @@ export class AwardService {
                   _id: 0,
                },
             },
+            {
+               $set: {
+                  year: {
+                     $concat: [' ', '$year', ' '],
+                  },
+               },
+            },
+            {
+               $match: {
+                  'documents.deletedAt': null,
+               },
+            },
+            {
+               $sort: {
+                  year: -1, // Sort by year in descending order
+               },
+            },
          ])
          .exec();
 
       const result = {};
       console.log(aggregation);
       for (const group of aggregation) {
-         const filteredDocuments = group.documents.filter((document) => document.deletedAt === null);
-
+         const filteredDocuments = await group.documents.filter((document) => document.deletedAt === null);
          for (const document of filteredDocuments) {
             document.image = `${process.env.GC_URL}/${process.env.PREFIX_UPLOAD_URL}/awards/${document._id}/image/${document.image}`;
          }
          result[group.year] = filteredDocuments;
       }
+      console.log('result::', result);
 
       return result;
    }
