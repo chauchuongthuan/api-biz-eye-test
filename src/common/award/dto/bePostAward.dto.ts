@@ -17,6 +17,10 @@ export class BePostAwardDto {
    @ApiProperty()
    shortDescription: string;
 
+   @IsNotEmpty({ message: 'Description là bắt buộc!' })
+   @ApiProperty()
+   description: string;
+
    @IsNotEmpty({ message: 'Challenge là bắt buộc!' })
    @ApiProperty()
    challenge: string;
@@ -79,6 +83,13 @@ export class BePostAwardDto {
    //    message: 'Ảnh đại diện không hợp lệ!',
    // })
    image: any;
+
+   @IsOptional()
+   @MaxLength(255)
+   // @IsExistFileTmp([], {
+   //    message: 'Ảnh đại diện không hợp lệ!',
+   // })
+   coverSocial: any;
 
    @IsOptional()
    @MaxLength(255)

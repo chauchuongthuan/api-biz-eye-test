@@ -62,6 +62,12 @@ export class Post extends Document {
    image: string;
 
    @Prop({
+      required: false,
+      trim: true,
+   })
+   imageCaption: string;
+
+   @Prop({
       default: null,
    })
    imageMb: string;
