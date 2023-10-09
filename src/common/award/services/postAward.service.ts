@@ -120,7 +120,15 @@ export class AwardPostService {
    }
 
    async create(data: object, files: Record<any, any>): Promise<AwardPost> {
-      await convertContentFileDto(data, files, ['detailImage', 'image', 'social', 'gallery', 'metaImage', 'thumbnailVideo']);
+      await convertContentFileDto(data, files, [
+         'coverSocial',
+         'detailImage',
+         'image',
+         'social',
+         'gallery',
+         'metaImage',
+         'thumbnailVideo',
+      ]);
       const titleNon = this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
       const item = await new this.award(data).save();
@@ -129,7 +137,15 @@ export class AwardPostService {
    }
 
    async update(id: string, data: object, files: Record<any, any>): Promise<AwardPost> {
-      await convertContentFileDto(data, files, ['detailImage', 'image', 'social', 'gallery', 'metaImage', 'thumbnailVideo']);
+      await convertContentFileDto(data, files, [
+         'coverSocial',
+         'detailImage',
+         'image',
+         'social',
+         'gallery',
+         'metaImage',
+         'thumbnailVideo',
+      ]);
       const titleNon = this.helper.nonAccentVietnamese(data['title']);
       data['titleNon'] = titleNon;
       const item = await this.award.findByIdAndUpdate(id, data, { returnOriginal: false });

@@ -89,6 +89,13 @@ export class BePostAwardDto {
    // @IsExistFileTmp([], {
    //    message: 'Ảnh đại diện không hợp lệ!',
    // })
+   coverSocial: any;
+
+   @IsOptional()
+   @MaxLength(255)
+   // @IsExistFileTmp([], {
+   //    message: 'Ảnh đại diện không hợp lệ!',
+   // })
    detailImage: any;
 
    @IsOptional()

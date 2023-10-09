@@ -19,6 +19,11 @@ export class AwardPost extends Document implements TimestampInterface {
    thumbnailVideo: string;
 
    @Prop({
+      required: false,
+   })
+   coverSocial: string;
+
+   @Prop({
       required: true,
       trim: true,
       type: String,

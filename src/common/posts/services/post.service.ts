@@ -216,7 +216,7 @@ export class PostService {
       let hot;
 
       if (query.page == 1) {
-         let post = await this.post.findOne({ isHot: true }).populate(['tags', 'assigned']);
+         const post = await this.post.findOne({ isHot: true }).populate(['tags', 'assigned']);
          if (post) hot = await this.transformerPostService.transformPostDetail(post);
       }
       console.log(`🚀hot----->`, hot);
