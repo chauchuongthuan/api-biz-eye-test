@@ -46,6 +46,14 @@ export class BePostDto {
    imageMb: string;
 
    @ApiProperty({
+      type: String,
+      description: 'imageCaption',
+      required: false,
+   })
+   @IsNotEmpty()
+   imageCaption: string;
+
+   @ApiProperty({
       type: Object,
       description: 'gallery',
       required: false,

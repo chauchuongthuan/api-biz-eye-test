@@ -214,6 +214,7 @@ AwardPostSchema.methods.thumbnail = function (): any {
          image: {},
          metaImage: {},
          thumbnailVideo: {},
+         coverSocial: {},
       },
    };
 };

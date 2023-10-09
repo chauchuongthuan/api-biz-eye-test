@@ -123,6 +123,7 @@ export class TransformerPostService {
          author: doc.author,
          lastEditor: doc.lastEditor,
          feature: doc.feature,
+         imageCaption: doc?.imageCaption,
          commentCount: await this.comment.countDocuments({ post: doc._id }),
          postCategory: this.transformCategoryDetail(doc.postCategory),
          tags: this.transformTagList(doc.tags),
