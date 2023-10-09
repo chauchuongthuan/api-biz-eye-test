@@ -6,7 +6,7 @@ export class PubSubService {
    constructor() {}
 
    publishPubSub(name: string, data: any) {
-      console.log('data PUB::', data);
+      // console.log('data PUB::', data);
       pubSub.publish(name, data);
    }
    asyncIterator(name: string) {
