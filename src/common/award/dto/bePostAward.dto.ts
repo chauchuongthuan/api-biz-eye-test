@@ -17,6 +17,10 @@ export class BePostAwardDto {
    @ApiProperty()
    shortDescription: string;
 
+   @IsNotEmpty({ message: 'Description là bắt buộc!' })
+   @ApiProperty()
+   description: string;
+
    @IsNotEmpty({ message: 'Challenge là bắt buộc!' })
    @ApiProperty()
    challenge: string;
