@@ -24,7 +24,7 @@ async function createFileEvn() {
       type: 'service_account',
       project_id: process.env.PROJECT_ID,
       private_key_id: process.env.PRIVATE_KEY_ID,
-      private_key: process.env.GOOGLE_APPLICATION_CREDENTIALS_PEM,
+      private_key: process.env.GOOGLE_APPLICATION_CREDENTIALS_PEM.split(String.raw`\n`).join('\n'),
       client_email: process.env.CLIENT_EMAIL,
       client_id: process.env.CLIENT_ID,
       auth_uri: process.env.AUTH_URI,
@@ -32,13 +32,13 @@ async function createFileEvn() {
       auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
       client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
    };
+   console.log(`🚀data----->`, data);
    const jsonData = JSON.stringify(data);
    const filePath = './gcKey.json';
    fs.writeFileSync(filePath, jsonData);
 }
 
 createFileEvn();
-
 async function bootstrap() {
    fs.mkdirSync(process.env.PREFIX_UPLOAD_TMP, { recursive: true });
    fs.mkdirSync(process.env.PREFIX_FILE_MANAGER, { recursive: true });
