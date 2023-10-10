@@ -43,31 +43,18 @@ export interface compressOptionInterface {
 export function configUpload() {
    return {
       NODE_URL: process.env.NODE_URL,
-
       FILESYSTEM_DRIVER: process.env.FILESYSTEM_DRIVER,
-
       PREFIX_UPLOAD: process.env.PREFIX_UPLOAD,
-
       PREFIX_UPLOAD_URL: process.env.PREFIX_UPLOAD_URL,
-
       PREFIX_UPLOAD_TMP: process.env.PREFIX_UPLOAD_TMP,
-
       DO_ACCESS_KEY_ID: process.env.DO_ACCESS_KEY_ID,
-
       DO_SECRET_ACCESS_KEY: process.env.DO_SECRET_ACCESS_KEY,
-
       DO_DEFAULT_REGION: process.env.DO_DEFAULT_REGION,
-
       DO_BUCKET: process.env.DO_BUCKET,
-
       DO_ENDPOINT: process.env.DO_ENDPOINT,
-
       DO_URL: process.env.DO_URL,
-
       GOOGLE_APPLICATION_CREDENTIALS_PEM: process.env.GOOGLE_APPLICATION_CREDENTIALS_PEM,
-
       GC_BUCKET: process.env.GC_BUCKET,
-
       GC_URL: process.env.GC_URL,
    };
 }
