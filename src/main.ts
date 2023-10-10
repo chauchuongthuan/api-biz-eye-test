@@ -33,6 +33,7 @@ async function bootstrap() {
          auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
          client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
       };
+      console.log(`🚀data----->`, data);
       const jsonData = JSON.stringify(data);
       const filePath = './gcKey.json';
       fs.writeFileSync(filePath, jsonData);
