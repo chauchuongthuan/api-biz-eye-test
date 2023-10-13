@@ -17,7 +17,7 @@ export const multerConfig = {
 export const multerOptions = {
    // Enable file size limits
    limits: {
-      fileSize: 50000000000000000,
+      fileSize: +50000000000000000,
    },
    // Check the mimetypes to allow for upload
    fileFilter: (req: Request, file: Record<any, any>, cb: (result, isValid) => void): void => {
